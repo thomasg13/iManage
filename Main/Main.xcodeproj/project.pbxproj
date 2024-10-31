@@ -11,6 +11,8 @@
 		E93916ED2CD441CC000800A9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93916EC2CD441CC000800A9 /* ContentView.swift */; };
 		E93916EF2CD441CD000800A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E93916EE2CD441CD000800A9 /* Assets.xcassets */; };
 		E93916F22CD441CD000800A9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E93916F12CD441CD000800A9 /* Preview Assets.xcassets */; };
+		E939171A2CD447F6000800A9 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93917192CD447F6000800A9 /* Test.swift */; };
+		E939171E2CD4483B000800A9 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E939171D2CD4483B000800A9 /* SwiftUIView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +40,8 @@
 		E93916F12CD441CD000800A9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E93916F72CD441CE000800A9 /* MainTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MainTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E93917012CD441CE000800A9 /* MainUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MainUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E93917192CD447F6000800A9 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
+		E939171D2CD4483B000800A9 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +119,7 @@
 		E93917162CD44726000800A9 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				E939171D2CD4483B000800A9 /* SwiftUIView.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -122,6 +127,7 @@
 		E93917182CD44749000800A9 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E93917192CD447F6000800A9 /* Test.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -258,6 +264,8 @@
 			files = (
 				E93916ED2CD441CC000800A9 /* ContentView.swift in Sources */,
 				E93916EB2CD441CC000800A9 /* MainApp.swift in Sources */,
+				E939171E2CD4483B000800A9 /* SwiftUIView.swift in Sources */,
+				E939171A2CD447F6000800A9 /* Test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
