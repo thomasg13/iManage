@@ -8,14 +8,43 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var showLoadingScreen = true
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            if showLoadingScreen {
+                LoadingScreenView()
+                    .transition(.opacity)
+                    .animation(.easeIn, value: 1)
+            } else {
+                TabView{
+                    MainPageView()
+                        .tabItem() {
+                            Image(systemName: "star.fill")
+                            Text("Page 1")
+                        }
+                    SecondPageView()
+                        .tabItem() {
+                            Image(systemName: "star.fill")
+                            Text("Page 2")
+                        }
+                    ThirdPageView()
+                        .tabItem() {
+                            Image(systemName: "star.fill")
+                            Text("Page 3")
+                        }
+                }
+            }
         }
-        .padding()
+        .onAppear {
+            DispatchQueue.main
+                .asyncAfter(deadline: .now() + 3)
+                {
+                    withAnimation{
+                        self.showLoadingScreen = false
+                    }
+                }
+        }
     }
 }
 
