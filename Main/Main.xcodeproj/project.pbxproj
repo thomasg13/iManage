@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9B1B2A1D2CFBF50100197A5B /* AddExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1B2A1C2CFBF50100197A5B /* AddExerciseView.swift */; };
+		9B1B2A1F2CFBF55900197A5B /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1B2A1E2CFBF55900197A5B /* Exercise.swift */; };
+		9B1B2A212CFBF57F00197A5B /* WorkoutDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1B2A202CFBF57F00197A5B /* WorkoutDay.swift */; };
+		9B1B2A232CFBF7EE00197A5B /* WorkoutSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1B2A222CFBF7EE00197A5B /* WorkoutSchedule.swift */; };
+		9B1B2A262CFBF82100197A5B /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1B2A252CFBF82100197A5B /* CalendarView.swift */; };
+		9B1B2A282CFBF84500197A5B /* WorkoutDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1B2A272CFBF84500197A5B /* WorkoutDetailView.swift */; };
 		E346D7092CF6F8C5006F0677 /* LoadingScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E346D7082CF6F8C5006F0677 /* LoadingScreenView.swift */; };
 		E346D70B2CF6F8E8006F0677 /* MainPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E346D70A2CF6F8E8006F0677 /* MainPageView.swift */; };
 		E346D70D2CF6F8FD006F0677 /* SecondPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E346D70C2CF6F8FD006F0677 /* SecondPageView.swift */; };
@@ -37,6 +43,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9B1B2A1C2CFBF50100197A5B /* AddExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExerciseView.swift; sourceTree = "<group>"; };
+		9B1B2A1E2CFBF55900197A5B /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
+		9B1B2A202CFBF57F00197A5B /* WorkoutDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDay.swift; sourceTree = "<group>"; };
+		9B1B2A222CFBF7EE00197A5B /* WorkoutSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSchedule.swift; sourceTree = "<group>"; };
+		9B1B2A252CFBF82100197A5B /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		9B1B2A272CFBF84500197A5B /* WorkoutDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetailView.swift; sourceTree = "<group>"; };
 		E346D7082CF6F8C5006F0677 /* LoadingScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScreenView.swift; sourceTree = "<group>"; };
 		E346D70A2CF6F8E8006F0677 /* MainPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageView.swift; sourceTree = "<group>"; };
 		E346D70C2CF6F8FD006F0677 /* SecondPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondPageView.swift; sourceTree = "<group>"; };
@@ -124,6 +136,9 @@
 				E346D70A2CF6F8E8006F0677 /* MainPageView.swift */,
 				E346D70C2CF6F8FD006F0677 /* SecondPageView.swift */,
 				E346D70E2CF6F910006F0677 /* ThirdPageView.swift */,
+				9B1B2A1C2CFBF50100197A5B /* AddExerciseView.swift */,
+				9B1B2A252CFBF82100197A5B /* CalendarView.swift */,
+				9B1B2A272CFBF84500197A5B /* WorkoutDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -140,6 +155,9 @@
 			isa = PBXGroup;
 			children = (
 				E93917192CD447F6000800A9 /* Test.swift */,
+				9B1B2A1E2CFBF55900197A5B /* Exercise.swift */,
+				9B1B2A202CFBF57F00197A5B /* WorkoutDay.swift */,
+				9B1B2A222CFBF7EE00197A5B /* WorkoutSchedule.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -274,11 +292,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B1B2A232CFBF7EE00197A5B /* WorkoutSchedule.swift in Sources */,
+				9B1B2A282CFBF84500197A5B /* WorkoutDetailView.swift in Sources */,
 				E93916ED2CD441CC000800A9 /* ContentView.swift in Sources */,
+				9B1B2A1D2CFBF50100197A5B /* AddExerciseView.swift in Sources */,
 				E346D70F2CF6F910006F0677 /* ThirdPageView.swift in Sources */,
 				E93916EB2CD441CC000800A9 /* MainApp.swift in Sources */,
 				E346D70B2CF6F8E8006F0677 /* MainPageView.swift in Sources */,
+				9B1B2A262CFBF82100197A5B /* CalendarView.swift in Sources */,
+				9B1B2A1F2CFBF55900197A5B /* Exercise.swift in Sources */,
 				E939171E2CD4483B000800A9 /* SwiftUIView.swift in Sources */,
+				9B1B2A212CFBF57F00197A5B /* WorkoutDay.swift in Sources */,
 				E346D7092CF6F8C5006F0677 /* LoadingScreenView.swift in Sources */,
 				E939171A2CD447F6000800A9 /* Test.swift in Sources */,
 				E346D70D2CF6F8FD006F0677 /* SecondPageView.swift in Sources */,
