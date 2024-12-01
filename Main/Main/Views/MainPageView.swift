@@ -5,7 +5,15 @@ struct MainPageView: View {
     @State private var isAddingTask = false
     @State private var tasks: [Task] = []
     @State private var taskBeingEdited: Task? = nil
+    @State private var sortOption: SortOption = .none
 
+    enum SortOption: String, CaseIterable {
+        case none = "None"
+        case color = "Color"
+        case dueDate = "Due Date"
+        case timeTaken = "Time Taken"
+    }
+    
     var body: some View {
         VStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 12) {
@@ -14,15 +22,41 @@ struct MainPageView: View {
                     .bold()
                     .padding(.top, 20)
                 
-                Text("Work Complete")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
+                HStack {
+                    Text("Work Complete")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                    Spacer()
+                    Text("\(calculateCompletionPercentage())% Complete")
+                        .font(.subheadline)
+                        .foregroundColor(.orange)
+                }
                 
                 ProgressView(value: calculateProgress())
                     .progressViewStyle(ThickProgressViewStyle(height: 30,  tint: Color.orange))
                     .padding(.trailing)
             }
             .padding(.horizontal)
+            
+            //sorting
+            Menu {
+                ForEach(SortOption.allCases, id: \.self) { option in
+                    Button(action: {
+                        sortOption = option
+                        sortTasks()
+                    }) {
+                        Text(option.rawValue)
+                    }
+                }
+            } label: {
+                HStack {
+                    Text("Sort by: \(sortOption.rawValue)")
+                        .font(.subheadline)
+                        .foregroundColor(.blue)
+                    Image(systemName: "chevron.down")
+                }
+                .padding(.horizontal)
+            }
             
             
             List {
@@ -130,6 +164,26 @@ struct MainPageView: View {
     private func editTask(_ task: Task) {
         print("Edit task: \(task.name)")
         taskBeingEdited = task
+    }
+    
+    private func sortTasks() {
+        switch sortOption {
+        case .none:
+            break;
+        case .color:
+            tasks.sort { $0.color.description < $1.color.description }
+        case .dueDate:
+            tasks.sort { $0.dueDate < $1.dueDate }
+        case .timeTaken:
+            tasks.sort { $0.estimateTime < $1.estimateTime }
+        }
+    }
+    
+    private func calculateCompletionPercentage() -> Int {
+        let completedTasks = tasks.filter { $0.isCompleted }.count
+        let totalTasks = tasks.count
+        guard totalTasks > 0 else { return 0 }
+        return Int((Double(completedTasks) / Double(totalTasks)) * 100)
     }
 }
 
