@@ -24,60 +24,63 @@ struct MainPageView: View {
             }
             .padding(.horizontal)
             
-            VStack {
-                GroupBox{
+            
+            List {
                 ForEach(tasks) { task in
+                    HStack {
+                        Capsule(style: RoundedCornerStyle.continuous)
+                            .fill(task.color)
+                            .frame(width: 10, height: .infinity)
+                                
+                        Button(action: {
+                            toggleTaskCompletion(task)
+                        }) {
+                            Image(systemName: task.isCompleted ? "checkmark.square.fill" : "square")
+                                .foregroundColor(task.isCompleted ? .green : .gray)
+                        }
+                            
+                        VStack(alignment: .leading) {
                             HStack {
-                                Button(action: {
-                                    toggleTaskCompletion(task)
-                                }) {
-                                    Image(systemName: task.isCompleted ? "checkmark.square.fill" : "square")
-                                        .foregroundColor(task.isCompleted ? .green : .gray)
-                                }
-                                
-                                VStack(alignment: .leading) {
-                                    HStack{
-                                        Text(task.name)
-                                            .strikethrough(task.isCompleted, color: .gray)
-                                            .foregroundColor(task.isCompleted ? .gray : .primary)
-                                            .font(.headline)
-                                        Text(task.estimateTime)
-                                            .bold()
-                                            .foregroundColor(task.color)
-                                    }
-                                    Text(task.dueDate, style: .date)
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
-                                }
-                                
-                                Spacer()
+                                Text(task.name)
+                                    .strikethrough(task.isCompleted, color: .gray)
+                                    .foregroundColor(task.isCompleted ? .gray : .primary)
+                                    .font(.headline)
+                                Text(task.estimateTime)
+                                    .bold()
+                                    .foregroundColor(task.color)
                             }
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(task.color.opacity(0.2))
-                            .cornerRadius(8)
-                            .swipeActions {
-                                Button(role: .destructive) {
-                                    deleteTask(task)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-
-                                Button {
-                                    editTask(task)
-                                } label: {
-                                    Label("Edit", systemImage: "pencil")
-                                }
-                                .tint(.blue)
+                                
+                            Text(task.dueDate, style: .date)
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
                         }
-                        }
+                        Spacer()
                     }
-                .listStyle(PlainListStyle())
+                        
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .cornerRadius(8)
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            deleteTask(task)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    
+                        Button {
+                            editTask(task)
+                        } label: {
+                            Label("Edit", systemImage: "pencil")
+                        }
+                        .tint(.blue)
+                    }
+                }
+            }
+                .listStyle(.sidebar)
                 .sheet(item: $taskBeingEdited) { task in
                     EditTaskView(task: $tasks[tasks.firstIndex(where: { $0.id == task.id })!])
-            }
-            }
-            
+                }
+
             Spacer()
         }
         
