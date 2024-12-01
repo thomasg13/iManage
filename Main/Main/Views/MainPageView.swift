@@ -8,17 +8,18 @@ struct MainPageView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 12) {
                 Text("My Tasks")
                     .font(.largeTitle)
                     .bold()
+                    .padding(.top, 20)
                 
                 Text("Work Complete")
                     .font(.subheadline)
                     .foregroundColor(.gray)
                 
                 ProgressView(value: calculateProgress())
-                    .progressViewStyle(LinearProgressViewStyle(tint: Color.orange))
+                    .progressViewStyle(ThickProgressViewStyle(height: 30,  tint: Color.orange))
                     .padding(.trailing)
             }
             .padding(.horizontal)
@@ -186,6 +187,27 @@ struct Task: Identifiable {
     var dueDate: Date
     var isCompleted = false
     var color:Color = .blue
+}
+
+struct ThickProgressViewStyle: ProgressViewStyle {
+    let height: CGFloat
+    let tint: Color
+
+    func makeBody(configuration: Configuration) -> some View {
+        GeometryReader { geometry in
+            ZStack() {
+                RoundedRectangle(cornerRadius: height / 2)
+                    .frame(height: height)
+                    .foregroundColor(tint.opacity(0.3))
+
+                RoundedRectangle(cornerRadius: height / 2)
+                    .frame(width: CGFloat(configuration.fractionCompleted ?? 0) * geometry.size.width,
+                           height: height)
+                .foregroundColor(tint)
+            }
+        }
+        .frame(height: height)
+    }
 }
 
 #Preview {
