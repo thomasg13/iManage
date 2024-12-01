@@ -18,8 +18,8 @@ struct LoadingScreenView: View {
 			
 			HStack(spacing: 0) {
 				ForEach(0..<text.count, id: \.self) { index in
-					Text(String(text[text.index(text.startIndex, offsetBy: index)]))
-						.font(.title)
+                    Text(String(text[text.index(text.startIndex, offsetBy: index)])).font(Font.custom("Borel-Regular", size: 35))
+                        .font(.title)
 						.bold()
 						.foregroundStyle(.secondary)
 						.background(.ultraThinMaterial)

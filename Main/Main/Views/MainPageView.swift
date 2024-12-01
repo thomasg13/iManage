@@ -23,56 +23,65 @@ struct MainPageView: View {
                     .padding(.trailing)
             }
             .padding(.horizontal)
-
-            List {
+            
+            VStack {
+                GroupBox{
                 ForEach(tasks) { task in
-                    HStack {
-                        Button(action: {
-                            toggleTaskCompletion(task)
-                        }) {
-                            Image(systemName: task.isCompleted ? "checkmark.square.fill" : "square")
-                                .foregroundColor(task.isCompleted ? .green : .gray)
-                        }
-                        
-                        VStack(alignment: .leading) {
-                            Text(task.name)
-                                .strikethrough(task.isCompleted, color: .gray)
-                                .foregroundColor(task.isCompleted ? .gray : .primary)
-                                .font(.headline)
-                            Text(task.dueDate, style: .date)
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding()
-                    .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                    .background(task.color.opacity(0.2))
-                    .cornerRadius(8)
-                    .swipeActions {
-                        Button(role: .destructive) {
-                            deleteTask(task)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
+                            HStack {
+                                Button(action: {
+                                    toggleTaskCompletion(task)
+                                }) {
+                                    Image(systemName: task.isCompleted ? "checkmark.square.fill" : "square")
+                                        .foregroundColor(task.isCompleted ? .green : .gray)
+                                }
+                                
+                                VStack(alignment: .leading) {
+                                    HStack{
+                                        Text(task.name)
+                                            .strikethrough(task.isCompleted, color: .gray)
+                                            .foregroundColor(task.isCompleted ? .gray : .primary)
+                                            .font(.headline)
+                                        Text(task.estimateTime)
+                                            .bold()
+                                            .foregroundColor(task.color)
+                                    }
+                                    Text(task.dueDate, style: .date)
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                }
+                                
+                                Spacer()
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(task.color.opacity(0.2))
+                            .cornerRadius(8)
+                            .swipeActions {
+                                Button(role: .destructive) {
+                                    deleteTask(task)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
 
-                        Button {
-                            editTask(task)
-                        } label: {
-                            Label("Edit", systemImage: "pencil")
+                                Button {
+                                    editTask(task)
+                                } label: {
+                                    Label("Edit", systemImage: "pencil")
+                                }
+                                .tint(.blue)
                         }
-                        .tint(.blue)
+                        }
                     }
-                }
+                .listStyle(PlainListStyle())
+                .sheet(item: $taskBeingEdited) { task in
+                    EditTaskView(task: $tasks[tasks.firstIndex(where: { $0.id == task.id })!])
             }
-            .listStyle(PlainListStyle())
-            .sheet(item: $taskBeingEdited) { task in
-                EditTaskView(task: $tasks[tasks.firstIndex(where: { $0.id == task.id })!])
             }
             
             Spacer()
         }
+        
+        
         .background(Color(UIColor.systemGroupedBackground))
         .overlay(
             VStack {
@@ -96,6 +105,8 @@ struct MainPageView: View {
         .sheet(isPresented: $isAddingTask) {
             AddTaskView(isPresented: $isAddingTask, tasks: $tasks)
         }
+        
+        
     }
 
     private func toggleTaskCompletion(_ task: Task) {
@@ -125,6 +136,7 @@ struct AddTaskView: View {
     @State private var taskName = ""
     @State private var dueDate = Date()
     @State private var selectedColor = Color.blue
+    @State private var taskEstimateTime = ""
     
     var body: some View {
         NavigationView {
@@ -132,6 +144,8 @@ struct AddTaskView: View {
                 TextField("Task Name", text: $taskName)
                 
                 DatePicker("Due Date", selection: $dueDate, displayedComponents: .date)
+                
+                TextField("Estimate Time", text: $taskEstimateTime)
                 
                 ColorPicker("Task Color", selection: $selectedColor)
             }
@@ -144,7 +158,7 @@ struct AddTaskView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        let newTask = Task(name: taskName, dueDate: dueDate, color: selectedColor)
+                        let newTask = Task(name: taskName, dueDate: dueDate, color: selectedColor, estimateTime: taskEstimateTime)
                         tasks.append(newTask)
                         isPresented = false
                     }
@@ -165,7 +179,9 @@ struct EditTaskView: View {
                 TextField("Task Name", text: $task.name)
 
                 DatePicker("Due Date", selection: $task.dueDate, displayedComponents: .date)
-
+                
+                TextField("Estimate Time", text: $task.estimateTime)
+                
                 ColorPicker("Task Color", selection: $task.color)
             }
             .navigationTitle("Edit Task")
@@ -187,6 +203,7 @@ struct Task: Identifiable {
     var dueDate: Date
     var isCompleted = false
     var color:Color = .blue
+    var estimateTime: String
 }
 
 struct ThickProgressViewStyle: ProgressViewStyle {
