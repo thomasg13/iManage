@@ -1,26 +1,79 @@
-//
-//  SecondPageView.swift
-//  Main
-//
-//  Created by David Huang on 11/27/24.
-//
-
 import SwiftUI
 
 struct SecondPageView: View {
+    @State private var workoutSchedule = WorkoutSchedule()
+    @State private var selectedWorkoutDay: WorkoutDay? = nil
+    @State private var selectedDate: Date? = nil // Track the selected date
+
     var body: some View {
-        ZStack {
-            //2nd page functions
-            Color.black
-            
-            Image(systemName: "star.fill")
-                .foregroundColor(Color.white)
-                .font(.title)
-            
-            Text("Page 2")
-                .foregroundStyle(Color.red)
-                .font(.title)
+        NavigationView {
+            VStack {
+                // Title
+                Text("Weekly Calendar")
+                    .font(.largeTitle)
+                    .bold()
+                    .padding(.top)
+
+                // Horizontal Calendar
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 15) {
+                        ForEach(workoutSchedule.days, id: \.id) { workoutDay in
+                            VStack {
+                                Text(formattedDay(workoutDay.date))
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+
+                                Text(formattedDate(workoutDay.date))
+                                    .font(.headline)
+                                    .bold()
+                                    .foregroundColor(selectedDate == workoutDay.date ? .white : .black)
+                                    .frame(width: 40, height: 40)
+                                    .background(
+                                        Circle()
+                                            .foregroundColor(selectedDate == workoutDay.date ? .blue : .clear)
+                                    )
+                                    .onTapGesture {
+                                        selectedWorkoutDay = workoutDay
+                                        selectedDate = workoutDay.date
+                                    }
+                            }
+                        }
+                    }
+                    .padding()
+                }
+                .background(Color(UIColor.systemGray6))
+                .cornerRadius(10)
+                .padding()
+
+                // Automatically navigate to the Workout Details view when a date is selected
+                NavigationLink(
+                    destination: WorkoutDetailView(workoutDay: selectedWorkoutDay ?? WorkoutDay(date: Date(), type: "Rest", exercises: [])),
+                    isActive: Binding(
+                        get: { selectedWorkoutDay != nil },
+                        set: { _ in selectedWorkoutDay = nil } // Reset the selected workout day when navigating back
+                    )
+                ) {
+                    EmptyView()
+                }
+            }
+            .onAppear {
+                workoutSchedule.generateSchedule() // Generate schedule on load
+            }
         }
+    }
+
+    // Helper to format the date
+    private func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d" // Day of the month
+        return formatter.string(from: date)
+    }
+
+    // Helper to format the day (e.g., Sun, Mon)
+    private func formattedDay(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "E" // Day of the week
+        return formatter.string(from: date)
     }
 }
 
