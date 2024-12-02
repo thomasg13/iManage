@@ -19,6 +19,8 @@ struct FourthPageView: View {
     @State private var calorieAmount: Double = 0;
     @State private var pageAmount: Double = 0;
     @State private var exerciseAmount: Double = 0;
+    
+    @State private var tasks: [Task] = []//change this to smth else
 
     var body: some View {
         VStack {
@@ -69,8 +71,8 @@ struct FourthPageView: View {
                 pageGoal: $pageGoal
             )
         }
-        .sheet(isPresented: $isEditingGoals) {
-            //log data
+        .sheet(isPresented: $isLoggingData) {
+            LogDataView(isPresented: $isLoggingData, tasks: $tasks)
         }
         
     }
@@ -196,8 +198,58 @@ struct EditingGoalsView: View {
     }
 }
 
+struct LogDataView: View {
+    @Binding var isPresented: Bool
+    @Binding var tasks: [Task]
+    @State private var taskName = ""
+    @State private var dueDate = Date()
+    @State private var selectedColor = Color.blue
+    @State private var taskEstimateTime = ""
+
+    @State private var name = ""
+    @State private var amount = ""
+    @State private var selectedType = "Water" // Default selection
+
+    let taskTypes = ["Water", "Food", "Exercise", "Read"]
 
 
+
+    var body: some View {
+        NavigationView {
+            Form {
+                TextField("Item to Record", text: $name)
+
+                Picker("Select the Type", selection: $selectedType) {
+                    ForEach(taskTypes, id: \.self) { type in
+                        Text(type).tag(type)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle()) // Optional: Use a menu dropdown style
+
+
+                TextField("Amount", text: $taskEstimateTime)
+
+                ColorPicker("Task Color", selection: $selectedColor)
+            }
+            .navigationTitle("Log Recorder")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        isPresented = false
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        let newTask = Task(name: taskName, dueDate: dueDate, color: selectedColor, estimateTime: taskEstimateTime)
+                        tasks.append(newTask)
+                        isPresented = false
+                    }
+                    .disabled(name.isEmpty)
+                }
+            }
+        }
+    }
+}
 
 #Preview {
     FourthPageView()
