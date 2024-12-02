@@ -18,33 +18,36 @@ struct WorkoutDetailView: View {
                 VStack(alignment: .leading) {
                     Text(exercise.name)
                         .font(.headline)
-                    Text("Sets: \(exercise.sets), Reps: \(exercise.reps)")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                }
-            }
+                    HStack {
+                        TextField("Weight (lbs)", text: .constant(""))
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .keyboardType(.decimalPad)
+                            .frame(width: 100)
 
-            Button(action: {
-                markWorkoutAsComplete()
-            }) {
-                Text(workoutDay.isCompleted ? "Completed" : "Mark as Completed")
-                    .padding()
-                    .background(workoutDay.isCompleted ? Color.green : Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
+                        Spacer()
+
+                        Button(action: {
+                            // Mark exercise as complete logic
+                            print("Completed \(exercise.name)")
+                        }) {
+                            Text("Complete")
+                                .padding(8)
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                        }
+                    }
+                }
+                .padding(.vertical, 5)
             }
         }
         .padding()
     }
 
+    // Helper to format the date
     private func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM dd" // E.g., Dec 02
         return formatter.string(from: date)
-    }
-
-    private func markWorkoutAsComplete() {
-        // Mark the workout as completed (could update the model here)
-        print("Workout completed for \(formattedDate(workoutDay.date))")
     }
 }

@@ -3,62 +3,76 @@ import SwiftUI
 struct SecondPageView: View {
     @State private var workoutSchedule = WorkoutSchedule()
     @State private var selectedWorkoutDay: WorkoutDay? = nil
+    @State private var selectedDate: Date? = nil // Track the selected date
 
     var body: some View {
-        VStack {
-            Text("My Workout Schedule")
-                .font(.largeTitle)
-                .bold()
-                .padding()
+        NavigationView {
+            VStack {
+                // Title
+                Text("Weekly Calendar")
+                    .font(.largeTitle)
+                    .bold()
+                    .padding(.top)
 
-            // Calendar View (list of all workout days)
-            List {
-                ForEach(workoutSchedule.days, id: \.id) { workoutDay in
-                    HStack {
-                        Text(formattedDate(workoutDay.date))
-                            .frame(width: 100, alignment: .leading)
+                // Horizontal Calendar
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 15) {
+                        ForEach(workoutSchedule.days, id: \.id) { workoutDay in
+                            VStack {
+                                Text(formattedDay(workoutDay.date))
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
 
-                        Text(workoutDay.type)
-                            .frame(width: 120)
-
-                        Spacer()
-
-                        // Button to navigate to the workout details for the day
-                        Button(action: {
-                            self.selectedWorkoutDay = workoutDay
-                        }) {
-                            Text("View Workout")
-                        }
-                        .sheet(item: $selectedWorkoutDay) { workoutDay in
-                            WorkoutDetailView(workoutDay: workoutDay)
+                                Text(formattedDate(workoutDay.date))
+                                    .font(.headline)
+                                    .bold()
+                                    .foregroundColor(selectedDate == workoutDay.date ? .white : .black)
+                                    .frame(width: 40, height: 40)
+                                    .background(
+                                        Circle()
+                                            .foregroundColor(selectedDate == workoutDay.date ? .blue : .clear)
+                                    )
+                                    .onTapGesture {
+                                        selectedWorkoutDay = workoutDay
+                                        selectedDate = workoutDay.date
+                                    }
+                            }
                         }
                     }
+                    .padding()
+                }
+                .background(Color(UIColor.systemGray6))
+                .cornerRadius(10)
+                .padding()
+
+                // Automatically navigate to the Workout Details view when a date is selected
+                NavigationLink(
+                    destination: WorkoutDetailView(workoutDay: selectedWorkoutDay ?? WorkoutDay(date: Date(), type: "Rest", exercises: [])),
+                    isActive: Binding(
+                        get: { selectedWorkoutDay != nil },
+                        set: { _ in selectedWorkoutDay = nil } // Reset the selected workout day when navigating back
+                    )
+                ) {
+                    EmptyView()
                 }
             }
             .onAppear {
-                workoutSchedule.generateSchedule() // Generate the workout schedule
+                workoutSchedule.generateSchedule() // Generate schedule on load
             }
-
-            // Button to add exercises (this would navigate to an 'AddExerciseView')
-            Button(action: {
-                // Navigation to the AddExerciseView where users can add new exercises
-                print("Add new exercise")
-            }) {
-                Text("Add Exercise")
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
-            .padding()
         }
-        .padding()
     }
 
-    // Utility function to format the date
+    // Helper to format the date
     private func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMM dd" // E.g., Dec 02
+        formatter.dateFormat = "d" // Day of the month
+        return formatter.string(from: date)
+    }
+
+    // Helper to format the day (e.g., Sun, Mon)
+    private func formattedDay(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "E" // Day of the week
         return formatter.string(from: date)
     }
 }
