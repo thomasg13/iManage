@@ -40,6 +40,9 @@ struct ThirdPageView: View {
 								.accentColor(.purple)
 							Text("\((Int)((reading.progress) * 100))%")
 						}
+						Toggle(isOn: $isChecked) {
+							
+						}
 						Button(action: {
 							print("View Book Shelf")
 							toViewShelf.toggle()
@@ -52,23 +55,18 @@ struct ThirdPageView: View {
 								.shadow(radius: 5)
 						}
 					}
-					Toggle(isOn: $isChecked) {
-					}
-					.onChange(of: isChecked) { value in
-						if value {
-							incrementReadingValues()
-						}
-					}
-					.disabled(isChecked || !canCheckToday())
-
-					if let reading = books.first {
-						JournalView(journal: $books[books.firstIndex(where: { $0.id == reading.id })!].journal)
+					.padding(20)
+				}
+				.onChange(of: isChecked) { value in
+					if value {
+						incrementReadingValues()
 					}
 				}
-				.padding(1)
-				.frame(maxWidth: .infinity)
-				.background(Color.gray.opacity(0.2))
-				.cornerRadius(10)
+				.disabled(isChecked || !canCheckToday())
+
+				if let reading = books.first {
+					JournalView(journal: $books[books.firstIndex(where: { $0.id == reading.id })!].journal)
+				}
 			}
 			
 		}
@@ -240,13 +238,12 @@ struct ModifyBookView: View {
 				.onChange(of: selectedDate) { newDate in
 					book.startDate = dateFormatter.string(from: newDate)
 				}
+			Text("Total Pages: ")
 			TextField("Pages", value: $book.pages, formatter: NumberFormatter())
 				.textFieldStyle(RoundedBorderTextFieldStyle())
 				.padding()
+			Text("Pages Per Day")
 			TextField("Pages per Day", value: $book.pagesPerDay, formatter: NumberFormatter())
-				.textFieldStyle(RoundedBorderTextFieldStyle())
-				.padding()
-			TextField("Days", value: $book.days, formatter: NumberFormatter())
 				.textFieldStyle(RoundedBorderTextFieldStyle())
 				.padding()
 			Button(action: {
