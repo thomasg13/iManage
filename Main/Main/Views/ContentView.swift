@@ -37,6 +37,11 @@ struct ContentView: View {
                             Image(systemName: "star.fill")
                             Text("Page 3")
                         }
+                    FourthPageView()
+                        .tabItem() {
+                            Image(systemName: "star.fill")
+                            Text("Page 4")
+                        }
                 }
             }
         }

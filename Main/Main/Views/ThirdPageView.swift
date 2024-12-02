@@ -320,3 +320,11 @@ struct JournalView: View {
     }
 }
 
+#Preview {
+    @State var books: [Book] = [
+        Book(name: "The Great Gatsby", startDate: "2024-11-27", isCompleted: false, pages: 300, pagesPerDay: 10, days: 20),
+        Book(name: "Magic Mountain", startDate: "2024-11-20", isCompleted: false, pages: 500, pagesPerDay: 10, days: 20)
+    ]
+    return ThirdPageView(books: $books)
+}
+

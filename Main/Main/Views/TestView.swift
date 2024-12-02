@@ -21,38 +21,38 @@ struct TestView: View {
     }
 }
 
-struct CircularProgressBar: View {
-    var progress: Double
-    var lineWidth: CGFloat = 20
-    var barColor: Color = .blue
-    var backgroundColor: Color = .gray.opacity(0.2)
-    
-    var body: some View {
-        ZStack {
-            Circle()
-                .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
-                .foregroundColor(backgroundColor)
-            
-            Circle()
-                .trim(from: 0.0, to: progress)
-                .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
-                .foregroundColor(barColor)
-                .rotationEffect(.degrees(-90))
-                .animation(.easeInOut, value: progress)
-            
-            VStack {
-                Text("Test")
-                    .font(.headline)
-                    .foregroundColor(.primary)
-                Text("\(Int(progress * 100))%")
-                    .font(.largeTitle)
-                    .bold()
-                    .foregroundColor(barColor)
-            }
-        }
-        .padding(lineWidth / 2)
-    }
-}
+//struct CircularProgressBar: View {
+//    var progress: Double
+//    var lineWidth: CGFloat = 20
+//    var barColor: Color = .blue
+//    var backgroundColor: Color = .gray.opacity(0.2)
+//    
+//    var body: some View {
+//        ZStack {
+//            Circle()
+//                .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+//                .foregroundColor(backgroundColor)
+//            
+//            Circle()
+//                .trim(from: 0.0, to: progress)
+//                .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+//                .foregroundColor(barColor)
+//                .rotationEffect(.degrees(-90))
+//                .animation(.easeInOut, value: progress)
+//            
+//            VStack {
+//                Text("Test")
+//                    .font(.headline)
+//                    .foregroundColor(.primary)
+//                Text("\(Int(progress * 100))%")
+//                    .font(.largeTitle)
+//                    .bold()
+//                    .foregroundColor(barColor)
+//            }
+//        }
+//        .padding(lineWidth / 2)
+//    }
+//}
 
 
 

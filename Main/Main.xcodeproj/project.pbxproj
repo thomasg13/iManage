@@ -25,6 +25,7 @@
 		E939171A2CD447F6000800A9 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93917192CD447F6000800A9 /* Test.swift */; };
 		E939171E2CD4483B000800A9 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E939171D2CD4483B000800A9 /* SwiftUIView.swift */; };
 		E93B886E2CFD1F93001B144E /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93B886D2CFD1F93001B144E /* TestView.swift */; };
+		E93B88702CFD982C001B144E /* FourthPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93B886F2CFD982C001B144E /* FourthPageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		E93917192CD447F6000800A9 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		E939171D2CD4483B000800A9 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		E93B886D2CFD1F93001B144E /* TestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
+		E93B886F2CFD982C001B144E /* FourthPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourthPageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 				E346D70A2CF6F8E8006F0677 /* MainPageView.swift */,
 				E346D70C2CF6F8FD006F0677 /* SecondPageView.swift */,
 				E346D70E2CF6F910006F0677 /* ThirdPageView.swift */,
+				E93B886F2CFD982C001B144E /* FourthPageView.swift */,
 				9B1B2A1C2CFBF50100197A5B /* AddExerciseView.swift */,
 				9B1B2A252CFBF82100197A5B /* CalendarView.swift */,
 				9B1B2A272CFBF84500197A5B /* WorkoutDetailView.swift */,
@@ -229,6 +232,7 @@
 				E346D7092CF6F8C5006F0677 /* LoadingScreenView.swift in Sources */,
 				E939171A2CD447F6000800A9 /* Test.swift in Sources */,
 				E346D70D2CF6F8FD006F0677 /* SecondPageView.swift in Sources */,
+				E93B88702CFD982C001B144E /* FourthPageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
