@@ -24,6 +24,7 @@
 		E93916F22CD441CD000800A9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E93916F12CD441CD000800A9 /* Preview Assets.xcassets */; };
 		E939171A2CD447F6000800A9 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93917192CD447F6000800A9 /* Test.swift */; };
 		E939171E2CD4483B000800A9 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E939171D2CD4483B000800A9 /* SwiftUIView.swift */; };
+		E93B886E2CFD1F93001B144E /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93B886D2CFD1F93001B144E /* TestView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		E93916F12CD441CD000800A9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E93917192CD447F6000800A9 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		E939171D2CD4483B000800A9 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
+		E93B886D2CFD1F93001B144E /* TestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +119,7 @@
 				9B1B2A1C2CFBF50100197A5B /* AddExerciseView.swift */,
 				9B1B2A252CFBF82100197A5B /* CalendarView.swift */,
 				9B1B2A272CFBF84500197A5B /* WorkoutDetailView.swift */,
+				E93B886D2CFD1F93001B144E /* TestView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -217,6 +220,7 @@
 				9B1B2A1D2CFBF50100197A5B /* AddExerciseView.swift in Sources */,
 				E346D70F2CF6F910006F0677 /* ThirdPageView.swift in Sources */,
 				E93916EB2CD441CC000800A9 /* MainApp.swift in Sources */,
+				E93B886E2CFD1F93001B144E /* TestView.swift in Sources */,
 				E346D70B2CF6F8E8006F0677 /* MainPageView.swift in Sources */,
 				9B1B2A262CFBF82100197A5B /* CalendarView.swift in Sources */,
 				9B1B2A1F2CFBF55900197A5B /* Exercise.swift in Sources */,
