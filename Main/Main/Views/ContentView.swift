@@ -9,6 +9,10 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var showLoadingScreen = true
+    @State private var books: [Book] = [
+        Book(name: "The great gatsby", startDate: "2024-11-27", isCompleted: false, pages: 300, pagesPerDay: 10, days: 20),
+        Book(name: "Magic Mountain", startDate: "2024-11-20", isCompleted: false, pages: 500, pagesPerDay: 10, days: 20)
+    ]
     
     var body: some View {
         ZStack {
@@ -28,7 +32,7 @@ struct ContentView: View {
                             Image(systemName: "star.fill")
                             Text("Page 2")
                         }
-                    ThirdPageView()
+                    ThirdPageView(books: $books)
                         .tabItem() {
                             Image(systemName: "star.fill")
                             Text("Page 3")
