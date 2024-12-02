@@ -13,17 +13,17 @@ struct LoadingScreenView: View {
 	var body: some View {
 		
 		ZStack{
-			Color.gray.opacity(0.2)
+			Color.white.opacity(0.5)
 				.edgesIgnoringSafeArea(.all)
 			
 			HStack(spacing: 0) {
 				ForEach(0..<text.count, id: \.self) { index in
 					Text(String(text[text.index(text.startIndex, offsetBy: index)]))
-						.font(.title)
+						.font(.system(size: 40))
 						.bold()
 						.foregroundStyle(.secondary)
-						.background(.ultraThinMaterial)
-						.background(Color(red: 0.1+Double(index) * 0.2, green: 0.2+Double(index) * 0.2, blue: 0.5+Double(index) * 0.2).gradient)
+						//.background(.ultraThinMaterial)
+						.foregroundStyle(Color(red: 0.2+Double(index) * 0.2, green: 0.1, blue: 0.1).gradient)
 						.opacity(self.textOpacity==0 ? 1 : 0)
 						.animation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true).delay(Double(index) * 0.2))
 						.onAppear {
