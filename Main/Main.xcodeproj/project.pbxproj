@@ -13,6 +13,7 @@
 		9B1B2A232CFBF7EE00197A5B /* WorkoutSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1B2A222CFBF7EE00197A5B /* WorkoutSchedule.swift */; };
 		9B1B2A262CFBF82100197A5B /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1B2A252CFBF82100197A5B /* CalendarView.swift */; };
 		9B1B2A282CFBF84500197A5B /* WorkoutDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1B2A272CFBF84500197A5B /* WorkoutDetailView.swift */; };
+		9B9C09792CFDA01E0019379E /* PomodoroTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B9C09782CFDA01D0019379E /* PomodoroTimerView.swift */; };
 		E346D7092CF6F8C5006F0677 /* LoadingScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E346D7082CF6F8C5006F0677 /* LoadingScreenView.swift */; };
 		E346D70B2CF6F8E8006F0677 /* MainPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E346D70A2CF6F8E8006F0677 /* MainPageView.swift */; };
 		E346D70D2CF6F8FD006F0677 /* SecondPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E346D70C2CF6F8FD006F0677 /* SecondPageView.swift */; };
@@ -35,6 +36,7 @@
 		9B1B2A222CFBF7EE00197A5B /* WorkoutSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSchedule.swift; sourceTree = "<group>"; };
 		9B1B2A252CFBF82100197A5B /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		9B1B2A272CFBF84500197A5B /* WorkoutDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetailView.swift; sourceTree = "<group>"; };
+		9B9C09782CFDA01D0019379E /* PomodoroTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroTimerView.swift; sourceTree = "<group>"; };
 		E346D7082CF6F8C5006F0677 /* LoadingScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScreenView.swift; sourceTree = "<group>"; };
 		E346D70A2CF6F8E8006F0677 /* MainPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageView.swift; sourceTree = "<group>"; };
 		E346D70C2CF6F8FD006F0677 /* SecondPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondPageView.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				9B1B2A252CFBF82100197A5B /* CalendarView.swift */,
 				9B1B2A272CFBF84500197A5B /* WorkoutDetailView.swift */,
 				E93B886D2CFD1F93001B144E /* TestView.swift */,
+				9B9C09782CFDA01D0019379E /* PomodoroTimerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -230,6 +233,7 @@
 				E939171E2CD4483B000800A9 /* SwiftUIView.swift in Sources */,
 				9B1B2A212CFBF57F00197A5B /* WorkoutDay.swift in Sources */,
 				E346D7092CF6F8C5006F0677 /* LoadingScreenView.swift in Sources */,
+				9B9C09792CFDA01E0019379E /* PomodoroTimerView.swift in Sources */,
 				E939171A2CD447F6000800A9 /* Test.swift in Sources */,
 				E346D70D2CF6F8FD006F0677 /* SecondPageView.swift in Sources */,
 				E93B88702CFD982C001B144E /* FourthPageView.swift in Sources */,

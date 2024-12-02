@@ -19,6 +19,7 @@ struct ThirdPageView: View {
     @State private var toViewShelf: Bool = false
     @State private var isChecked: Bool = false
     @State private var lastCheckedDate: Date?
+    @State private var showPomodoro: Bool = false // State for Pomodoro timer
 
     var body: some View {
         ZStack {
@@ -40,9 +41,7 @@ struct ThirdPageView: View {
                                 .accentColor(.purple)
                             Text("\((Int)((reading.progress) * 100))%")
                         }
-                        Toggle(isOn: $isChecked) {
-                            
-                        }
+                        Toggle(isOn: $isChecked) { }
                         Button(action: {
                             print("View Book Shelf")
                             toViewShelf.toggle()
@@ -68,15 +67,36 @@ struct ThirdPageView: View {
                     JournalView(journal: $books[books.firstIndex(where: { $0.id == reading.id })!].journal)
                 }
             }
-            
+
+            // Floating Button for Pomodoro Timer
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        showPomodoro = true
+                    }) {
+                        Image(systemName: "timer")
+                            .font(.system(size: 25))
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.red)
+                            .clipShape(Circle())
+                            .shadow(radius: 5)
+                    }
+                    .padding()
+                }
+            }
         }
         .sheet(isPresented: $toViewShelf) {
             BookShelfView(books: $books)
         }
+        .sheet(isPresented: $showPomodoro) {
+            PomodoroTimerView() // Present Pomodoro Timer
+        }
         .onAppear {
             checkIfCheckedToday()
         }
-        
     }
 
     private func incrementReadingValues() {
