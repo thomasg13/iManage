@@ -20,12 +20,15 @@ struct ThirdPageView: View {
 	var body: some View {
 		ZStack {
 			VStack {
+				Spacer()
+				Spacer()
+				Spacer()
+				Spacer()
 				Text("Book Shelf")
 					.font(Font.custom("Borel-Regular", size: 40))
 					.bold()
 					.foregroundStyle(.secondary)
 					.foregroundColor(.black)
-					.background(.ultraThinMaterial)
 					.padding(5)
 				BooksView(books: $books, toViewShelf: $toViewShelf)
 				JournalView(Journals: $Journals)
@@ -44,6 +47,7 @@ struct ThirdPageView: View {
 							.shadow(radius: 5)
 					}
 					.padding()
+					.offset(y: -40)
 				}
 			}
 
@@ -116,7 +120,7 @@ struct BookShelfView: View {
 	var body: some View {
 		VStack {
 			Text("Your Book Shelf")
-				.font(.system(size: 25))
+				.font(Font.custom("Borel-Regular", size: 25))
 				.bold()
 				.padding()
 			Spacer()
@@ -144,7 +148,6 @@ struct BookShelfView: View {
 					.bold()
 					.foregroundStyle(.secondary)
 					.foregroundColor(.black)
-					.background(.ultraThinMaterial)
 					.padding(5)
 			}
 		}
