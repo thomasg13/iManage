@@ -143,7 +143,7 @@ struct BookShelfView: View {
 			if let selected = selectedBook, let index = books.firstIndex(where: { $0.id == selected.id }) {
 				ModifyBookView(book: $books[index], books: $books)
 			} else {
-				Text("Here you can edit your book and/or update your reading progress (Swift to the left)")
+				Text("Here you can edit your book and/or update your reading progress (Swipe to the left)")
 					.font(Font.custom("Borel-Regular", size: 40))
 					.bold()
 					.foregroundStyle(.secondary)
