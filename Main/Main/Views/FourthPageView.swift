@@ -301,6 +301,7 @@ struct EditingGoalsView: View {
                             }
                     }
 
+
                     HStack {
                         Text("Calorie Goal (cal)")
                         Spacer()
