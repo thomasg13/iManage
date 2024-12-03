@@ -8,55 +8,58 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var showLoadingScreen = true
-    @State private var books: [Book] = [
-        Book(name: "The great gatsby", startDate: "2024-11-27", isCompleted: false, pages: 300, pagesPerDay: 10, days: 20),
-        Book(name: "Magic Mountain", startDate: "2024-11-20", isCompleted: false, pages: 500, pagesPerDay: 10, days: 20)
-    ]
-    
-    var body: some View {
-        ZStack {
-            if showLoadingScreen {
-                LoadingScreenView()
-                    .transition(.opacity)
-                    .animation(.easeIn, value: 1)
-            } else {
-                TabView{
-                    MainPageView()
-                        .tabItem() {
-                            Image(systemName: "star.fill")
-                            Text("Page 1")
-                        }
-                    SecondPageView()
-                        .tabItem() {
-                            Image(systemName: "star.fill")
-                            Text("Page 2")
-                        }
-                    ThirdPageView(books: $books)
-                        .tabItem() {
-                            Image(systemName: "star.fill")
-                            Text("Page 3")
-                        }
-                    FourthPageView()
-                        .tabItem() {
-                            Image(systemName: "star.fill")
-                            Text("Page 4")
-                        }
-                }
-            }
-        }
-        .onAppear {
-            DispatchQueue.main
-                .asyncAfter(deadline: .now() + 3)
-                {
-                    withAnimation{
-                        self.showLoadingScreen = false
-                    }
-                }
-        }
-    }
+	@State private var showLoadingScreen = true
+	@State var books: [Book] = [
+		Book(name: "The Great Gatsby", startDate: "2024-11-27", pages: 300, pagesRead:100),
+		Book(name: "Magic Mountain", startDate: "2024-11-28", pages: 300, pagesRead:100)
+	]
+	@State var Journals : [journal] = [
+		journal(title: "First Journal", date: "", note: "This is the first journal entry")
+	]
+	
+	var body: some View {
+		ZStack {
+			if showLoadingScreen {
+				LoadingScreenView()
+					.transition(.opacity)
+					.animation(.easeIn, value: 1)
+			} else {
+				TabView{
+					MainPageView()
+						.tabItem() {
+							Image(systemName: "star.fill")
+							Text("Page 1")
+						}
+					SecondPageView()
+						.tabItem() {
+							Image(systemName: "star.fill")
+							Text("Page 2")
+						}
+					ThirdPageView(books: $books, Journals: $Journals)
+						.tabItem() {
+							Image(systemName: "star.fill")
+							Text("Page 3")
+						}
+					FourthPageView()
+						.tabItem() {
+							Image(systemName: "star.fill")
+							Text("Page 4")
+						}
+				}
+			}
+		}
+		.onAppear {
+			DispatchQueue.main
+				.asyncAfter(deadline: .now() + 3)
+				{
+					withAnimation{
+						self.showLoadingScreen = false
+					}
+				}
+		}
+	}
 }
 
 #Preview {
-    ContentView()
+	ContentView()
 }
