@@ -124,6 +124,7 @@ struct BookShelfView: View {
                 .font(Font.custom("Borel-Regular", size: 25))
                 .bold()
                 .padding()
+            Text("Edit or Update Reading Progress")
             Spacer()
             List(books) { book in
                 BookRowView(book: book, changeBook: $changeBook, selectedBook: $selectedBook, books: $books)
@@ -140,18 +141,28 @@ struct BookShelfView: View {
                     .shadow(radius: 5)
             }
         }
-        .sheet(isPresented: $changeBook) {
+        .sheet(isPresented: Binding(
+            get: { changeBook && selectedBook != nil },
+            set: { changeBook = $0 }
+        )) {
             if let selected = selectedBook, let index = books.firstIndex(where: { $0.id == selected.id }) {
                 ModifyBookView(book: $books[index], books: $books)
-            } else {
-                Text("Here you can edit your book and/or update your reading progress (Swipe to the left)")
-                    .font(Font.custom("Monaco", size: 35))
-                    .bold()
-                    .foregroundStyle(.secondary)
-//                    .foregroundColor(.black)
-                    .padding(5)
             }
         }
+//        .sheet(isPresented: $changeBook) {
+//
+//            if let selected = selectedBook, let index = books.firstIndex(where: { $0.id == selected.id }) {
+//                ModifyBookView(book: $books[index], books: $books)
+//            }
+//            else {
+////                Text("Here you can edit your book and/or update your reading progress (Swipe to the left)")
+////                    .font(Font.custom("Monaco", size: 35))
+////                    .bold()
+////                    .foregroundStyle(.secondary)
+//////                    .foregroundColor(.black)
+////                    .padding(5)
+//            }
+//        }
         .sheet(isPresented: $addBook) {
             NewBookView(books: $books)
         }
@@ -183,10 +194,10 @@ struct NewBookView: View {
         VStack {
             Text("Add New Book")
                 .font(.largeTitle)
-                .padding()
+                .padding(.top, 75)
             TextField("Book Name", text: $name)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
+//                .padding()
             Text("Start Date")
 //            TextField("Start Date", text: $startDate)
 //                .textFieldStyle(RoundedBorderTextFieldStyle())
