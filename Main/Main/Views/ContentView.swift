@@ -40,12 +40,12 @@ struct ContentView: View {
                     SecondPageView()
                         .tabItem() {
 							if(selectedTab == 1) {
-								Image(systemName: "calendar.circle.fill")
-								Text("Tasks")
+								Image(systemName: "dumbbell.fill")
+								Text("Fitness")
 							}
 							else {
-								Image(systemName: "calendar")
-								Text("Tasks")
+								Image(systemName: "dumbbell")
+								Text("Fitness")
 							}
                         }
 						.tag(1)
@@ -54,11 +54,11 @@ struct ContentView: View {
                         .tabItem() {
 							if(selectedTab == 2) {
 								Image(systemName: "book.circle.fill")
-								Text("Tasks")
+								Text("Intel")
 							}
 							else {
 								Image(systemName: "book")
-								Text("Tasks")
+								Text("Intel")
 							}
                         }
 						.tag(2)
