@@ -164,10 +164,11 @@ struct LogDataView: View {
     @Binding var exerciseAmount: Double
     @State private var name = ""
     @State private var amount = ""
-    @State private var selectedType = "Water" // Default selection
+    @State private var selectedType = "Water Drinking"
     @State private var selectedColor = Color.blue
+    @State private var typeText = ""
     
-    let taskTypes = ["Water", "Food", "Exercise", "Read"]
+    let taskTypes = ["Water Drinking", "Food Intake", "Exercise", "Reading"]
     
     var body: some View {
         NavigationView {
@@ -180,12 +181,12 @@ struct LogDataView: View {
                 }
                 .pickerStyle(MenuPickerStyle())
                 
-                TextField("Amount", text: $amount)
+                TextField(amountText(), text: $amount)
                     .keyboardType(.numberPad)
                 
-                ColorPicker("Task Color", selection: $selectedColor)
+//                ColorPicker("Task Color", selection: $selectedColor)
             }
-            .navigationTitle("Log Recorder")
+            .navigationTitle("Log Data")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
@@ -203,26 +204,42 @@ struct LogDataView: View {
             }
         }
     }
-    private func saveLog() {
-        // Convert amount to Double
-        guard let amountValue = Double(amount) else { return }
-        
-
+    private func amountText() -> String {
         switch selectedType {
-        case "Water":
-            waterAmount += amountValue
-        case "Food":
-            calorieAmount += amountValue
+        case "Water Drinking":
+            return "Amount (mL)"
+        case "Food Intake":
+            return "Amount (calories)"
         case "Exercise":
-            exerciseAmount += amountValue
-        case "Read":
-            pageAmount += amountValue
+            return "Amount (minutes)"
+        case "Reading":
+            return "Amount (pages)"
         default:
-            break
+            return "Amount"
+        }
+    }
+    private func saveLog() {
+        guard let amountValue = Double(amount) else { return }
+        let taskColor: Color
+        
+        switch selectedType {
+            case "Water Drinking":
+                waterAmount += amountValue
+                taskColor = .blue
+            case "Food Intake":
+                calorieAmount += amountValue
+                taskColor = .yellow
+            case "Exercise":
+                exerciseAmount += amountValue
+                taskColor = .red
+            case "Reading":
+                pageAmount += amountValue
+                taskColor = .green
+            default:
+                taskColor = .gray
         }
         
-        // Add to the tasks list
-        let newTask = LogTask(name: name, type: selectedType, amount: amount, color: selectedColor)
+        let newTask = LogTask(name: name, type: selectedType, amount: amount, color: taskColor)
         tasks.append(newTask)
     }
 }
