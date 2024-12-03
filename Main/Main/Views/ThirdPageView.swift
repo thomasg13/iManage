@@ -28,7 +28,6 @@ struct ThirdPageView: View {
                     .font(Font.custom("Borel-Regular", size: 40))
                     .bold()
                     .foregroundStyle(.secondary)
-                    .foregroundColor(.black)
                     .padding(5)
                 BooksView(books: $books, toViewShelf: $toViewShelf)
                 JournalView(Journals: $Journals)
@@ -85,6 +84,7 @@ struct BooksView : View {
     }
 }
 struct BooksFrontView : View {
+	
     @Binding var books: [Book]
     var body : some View {
         ForEach(books.prefix(2), id: \.id) { book in
@@ -96,7 +96,8 @@ struct BooksFrontView : View {
                         .frame(width: 150, height: 200)
                         .border(Color.gray, width: 2)
                     Text(book.name)
-                        .font(Font.custom("Borel-Regular", size: 25))
+						.font(Font.custom("Borel-Regular", size: 25))
+						.foregroundStyle(Color.black)
                 }
                 HStack {
                     ProgressView(value: book.progress, total: 1)
@@ -147,7 +148,7 @@ struct BookShelfView: View {
                     .font(Font.custom("Monaco", size: 35))
                     .bold()
                     .foregroundStyle(.secondary)
-                    .foregroundColor(.black)
+//                    .foregroundColor(.black)
                     .padding(5)
             }
         }
@@ -289,9 +290,11 @@ struct BookRowView: View {
     @Binding var changeBook: Bool
     @Binding var selectedBook: Book?
     @Binding var books : [Book]
-
     var body: some View {
         HStack {
+			Capsule(style: RoundedCornerStyle.continuous)
+				.fill(.blue)
+				.frame(width: 5, height: .infinity)
             Text("\(book.name) Since: \(book.startDate)")
             ProgressView(value: book.progress, total: 1)
                 .padding()
@@ -319,7 +322,7 @@ struct BookRowView: View {
 }
 
 struct JournalView: View {
-    
+
     @State private var isAddingJournal = false
     @Binding var Journals: [journal]
     var body: some View {
@@ -328,7 +331,6 @@ struct JournalView: View {
                 .font(Font.custom("Borel-Regular", size: 40))
                 .bold()
                 .foregroundStyle(.secondary)
-                .foregroundColor(.black)
                 .padding(5)
             Button(action: {
                 isAddingJournal.toggle()
@@ -376,7 +378,7 @@ struct JournalNoteView: View {
                     HStack {
                         Capsule(style: RoundedCornerStyle.continuous)
                             .fill(.blue)
-                            .frame(width: 10, height: .infinity)
+                            .frame(width: 5, height: .infinity)
                             
                         VStack(alignment: .leading) {
                             VStack {
