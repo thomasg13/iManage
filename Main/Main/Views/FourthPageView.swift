@@ -194,8 +194,7 @@ struct LogDataView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-//                        let newTask = LogTask(name: name, type: selectedType, amount: amount, color: selectedColor)
-//                        tasks.append(newTask)
+
                         saveLog()
                         isPresented = false
                     }
@@ -208,7 +207,7 @@ struct LogDataView: View {
         // Convert amount to Double
         guard let amountValue = Double(amount) else { return }
         
-        // Update the corresponding variable based on selectedType
+
         switch selectedType {
         case "Water":
             waterAmount += amountValue
