@@ -8,7 +8,7 @@ struct WorkoutSchedule {
     }
 
     mutating func generateSchedule() {
-        let workoutTypes = ["Push", "Pull", "Legs", "Rest"] // 4 workout types
+        let workoutTypes = ["Push", "Pull", "Legs", "Rest"]
         let exercisesForPush: [Exercise] = [
             Exercise(name: "Bench Press", sets: 3, reps: 8),
             Exercise(name: "Chest Fly", sets: 3, reps: 12)
@@ -22,10 +22,10 @@ struct WorkoutSchedule {
             Exercise(name: "Lunges", sets: 3, reps: 12)
         ]
 
-        var currentDate = Date() // Starting date for the schedule
+        var currentDate = Date()
 
-        for i in 0..<30 { // Assume we are generating a 30-day schedule
-            let workoutType = workoutTypes[i % 4] // Correct the modulo operation to 4
+        for i in 0..<30 {
+            let workoutType = workoutTypes[i % 4]
 
             var exercises: [Exercise] = []
 
@@ -43,7 +43,6 @@ struct WorkoutSchedule {
             let workoutDay = WorkoutDay(date: currentDate, type: workoutType, exercises: exercises)
             self.days.append(workoutDay)
 
-            // Increment the date by 1 day
             currentDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate)!
         }
     }
