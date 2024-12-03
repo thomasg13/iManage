@@ -150,14 +150,14 @@ struct CircularProgressBar: View {
             Circle()
                 .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                 .foregroundColor(backgroundColor)
-
             Circle()
                 .trim(from: 0.0, to: progress)
                 .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                 .foregroundColor(barColor)
+                .shadow(color: barColor.opacity(0.5), radius: 10, x: 0, y: 0)
                 .rotationEffect(.degrees(-90))
-                .animation(.easeInOut, value: progress)
-
+                .animation(.easeInOut(duration: 1.0), value: progress)
+            
             VStack {
                 Text(text)
                     .font(.headline)
@@ -169,6 +169,7 @@ struct CircularProgressBar: View {
             }
         }
         .padding(lineWidth / 2)
+        .frame(width: 150, height: 150)
     }
 }
 
@@ -184,6 +185,7 @@ struct LogDataView: View {
     @State private var selectedType = "Water Drinking"
     @State private var selectedColor = Color.blue
     @State private var typeText = ""
+    @State private var showAlert = false
     
     let taskTypes = ["Water Drinking", "Food Intake", "Exercise", "Reading"]
     
@@ -236,7 +238,11 @@ struct LogDataView: View {
         }
     }
     private func saveLog() {
-        guard let amountValue = Double(amount) else { return }
+        guard let amountValue = Double(amount), amountValue >= 0 else {
+            showAlert = true
+            return
+        }
+        
         let taskColor: Color
         
         switch selectedType {
@@ -269,6 +275,7 @@ struct EditingGoalsView: View {
     @Binding var exerciseGoal: Double
     @Binding var pageGoal: Double
     @Environment(\.dismiss) private var dismiss
+    @State private var showAlert = false // State variable for alert
 
     var body: some View {
         VStack {
@@ -286,6 +293,12 @@ struct EditingGoalsView: View {
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .onChange(of: waterGoal) { newValue in
+                                if newValue < 0 {
+                                    waterGoal = 0
+                                    showAlert = true
+                                }
+                            }
                     }
 
                     HStack {
@@ -295,6 +308,12 @@ struct EditingGoalsView: View {
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .onChange(of: calorieGoal) { newValue in
+                                if newValue < 0 {
+                                    calorieGoal = 0
+                                    showAlert = true
+                                }
+                            }
                     }
 
                     HStack {
@@ -304,6 +323,12 @@ struct EditingGoalsView: View {
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .onChange(of: exerciseGoal) { newValue in
+                                if newValue < 0 {
+                                    exerciseGoal = 0
+                                    showAlert = true
+                                }
+                            }
                     }
 
                     HStack {
@@ -313,6 +338,12 @@ struct EditingGoalsView: View {
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .onChange(of: pageGoal) { newValue in
+                                if newValue < 0 {
+                                    pageGoal = 0
+                                    showAlert = true
+                                }
+                            }
                     }
                 }
             }
@@ -329,8 +360,14 @@ struct EditingGoalsView: View {
             }
             .padding()
         }
+        .alert("Invalid Input", isPresented: $showAlert) { // Add the alert here
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Goals cannot be negative. Please enter a positive value.")
+        }
     }
 }
+
 
 
 #Preview {
