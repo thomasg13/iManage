@@ -25,11 +25,9 @@ struct ThirdPageView: View {
         ZStack {
             VStack {
                 Text("Book Shelf")
-                    .font(.system(size: 25))
+                    .font(.largeTitle)
                     .bold()
-                    .foregroundStyle(.secondary)
-                    .foregroundColor(.blue)
-                    .background(.ultraThinMaterial)
+                    .padding(.top)
                 VStack {
                     HStack {
                         if let reading = books.first {
@@ -61,7 +59,7 @@ struct ThirdPageView: View {
                         incrementReadingValues()
                     }
                 }
-                .disabled(isChecked || !canCheckToday())
+                //.disabled(isChecked || !canCheckToday())
 
                 if let reading = books.first {
                     JournalView(journal: $books[books.firstIndex(where: { $0.id == reading.id })!].journal)
