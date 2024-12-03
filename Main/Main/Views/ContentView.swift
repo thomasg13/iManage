@@ -25,22 +25,22 @@ struct ContentView: View {
                     MainPageView()
                         .tabItem() {
                             Image(systemName: "star.fill")
-                            Text("Page 1")
+                            Text("Tasks")
                         }
                     SecondPageView()
                         .tabItem() {
                             Image(systemName: "star.fill")
-                            Text("Page 2")
+                            Text("Calendar")
                         }
                     ThirdPageView(books: $books)
                         .tabItem() {
                             Image(systemName: "star.fill")
-                            Text("Page 3")
+                            Text("Reading")
                         }
                     FourthPageView()
                         .tabItem() {
                             Image(systemName: "star.fill")
-                            Text("Page 4")
+                            Text("Daily Goals")
                         }
                 }
             }
