@@ -1,26 +1,28 @@
-//
-//  FourthPageView.swift
-//  Main
-//
-//  Created by Thomas Guo on 12/2/24.
-//
 import SwiftUI
+
+struct LogTask: Identifiable {
+    let id = UUID()
+    let name: String
+    let type: String
+    let amount: String
+    let color: Color
+}
 
 struct FourthPageView: View {
     @State private var waterGoal: Double = 2000
     @State private var calorieGoal: Double = 2000
     @State private var pageGoal: Double = 10
     @State private var exerciseGoal: Double = 45
-    
-    @State private var isEditingGoals = false;
-    @State private var isLoggingData = false;
-    
-    @State private var waterAmount: Double = 0;
-    @State private var calorieAmount: Double = 0;
-    @State private var pageAmount: Double = 0;
-    @State private var exerciseAmount: Double = 0;
-    
-    @State private var tasks: [Task] = []//change this to smth else
+
+    @State private var isEditingGoals = false
+    @State private var isLoggingData = false
+
+    @State private var waterAmount: Double = 0
+    @State private var calorieAmount: Double = 0
+    @State private var pageAmount: Double = 0
+    @State private var exerciseAmount: Double = 0
+
+    @State private var tasks: [LogTask] = []
 
     var body: some View {
         VStack {
@@ -28,7 +30,7 @@ struct FourthPageView: View {
                 .font(.largeTitle)
                 .bold()
                 .padding(.top, 20)
-            
+
             HStack {
                 CircularProgressBar(progress: calculatePercentage(current: waterAmount, goal: waterGoal), lineWidth: 15, barColor: .blue, text: "Water")
                     .frame(width: 150, height: 150)
@@ -41,7 +43,7 @@ struct FourthPageView: View {
                 CircularProgressBar(progress: calculatePercentage(current: exerciseAmount, goal: exerciseGoal), lineWidth: 15, barColor: .red, text: "Exercise")
                     .frame(width: 150, height: 150)
             }
-            HStack{
+            HStack {
                 Button(action: {
                     isEditingGoals.toggle()
                 }) {
@@ -61,6 +63,35 @@ struct FourthPageView: View {
                         .cornerRadius(8)
                 }
             }
+            .padding()
+            Divider()
+
+            VStack(alignment: .leading) {
+                Text("Logged Data")
+                    .font(.headline)
+                    .padding(.leading)
+
+                ScrollView {
+                    ForEach(tasks) { task in
+                        HStack {
+                            Circle()
+                                .fill(task.color)
+                                .frame(width: 20, height: 20)
+                            VStack(alignment: .leading) {
+                                Text("\(task.type): \(task.name)")
+                                    .font(.body)
+                                    .foregroundColor(.primary)
+                                Text("Amount: \(task.amount)")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .padding(.horizontal)
+                        .padding(.vertical, 4)
+                    }
+                }
+            }
+            .padding(.top)
             Spacer()
         }
         .sheet(isPresented: $isEditingGoals) {
@@ -72,13 +103,19 @@ struct FourthPageView: View {
             )
         }
         .sheet(isPresented: $isLoggingData) {
-            LogDataView(isPresented: $isLoggingData, tasks: $tasks)
+            LogDataView(
+                isPresented: $isLoggingData,
+                tasks: $tasks,
+                waterAmount: $waterAmount,
+                calorieAmount: $calorieAmount,
+                pageAmount: $pageAmount,
+                exerciseAmount: $exerciseAmount
+            )
         }
-        
+
     }
-    
+
     private func calculatePercentage(current: Double, goal: Double) -> Double {
-        
         guard goal > 0 else { return 0.0 }
         return min(current / goal, 1.0)
     }
@@ -118,6 +155,81 @@ struct CircularProgressBar: View {
     }
 }
 
+struct LogDataView: View {
+    @Binding var isPresented: Bool
+    @Binding var tasks: [LogTask]
+    @Binding var waterAmount: Double
+    @Binding var calorieAmount: Double
+    @Binding var pageAmount: Double
+    @Binding var exerciseAmount: Double
+    @State private var name = ""
+    @State private var amount = ""
+    @State private var selectedType = "Water" // Default selection
+    @State private var selectedColor = Color.blue
+    
+    let taskTypes = ["Water", "Food", "Exercise", "Read"]
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                TextField("Task Name", text: $name)
+                Picker("Select Type", selection: $selectedType) {
+                    ForEach(taskTypes, id: \.self) { type in
+                        Text(type).tag(type)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
+                
+                TextField("Amount", text: $amount)
+                    .keyboardType(.numberPad)
+                
+                ColorPicker("Task Color", selection: $selectedColor)
+            }
+            .navigationTitle("Log Recorder")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        isPresented = false
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+//                        let newTask = LogTask(name: name, type: selectedType, amount: amount, color: selectedColor)
+//                        tasks.append(newTask)
+                        saveLog()
+                        isPresented = false
+                    }
+                    .disabled(name.isEmpty || amount.isEmpty)
+                }
+            }
+        }
+    }
+    private func saveLog() {
+        // Convert amount to Double
+        guard let amountValue = Double(amount) else { return }
+        
+        // Update the corresponding variable based on selectedType
+        switch selectedType {
+        case "Water":
+            waterAmount += amountValue
+        case "Food":
+            calorieAmount += amountValue
+        case "Exercise":
+            exerciseAmount += amountValue
+        case "Read":
+            pageAmount += amountValue
+        default:
+            break
+        }
+        
+        // Add to the tasks list
+        let newTask = LogTask(name: name, type: selectedType, amount: amount, color: selectedColor)
+        tasks.append(newTask)
+    }
+}
+
+
+
 struct EditingGoalsView: View {
     @Binding var waterGoal: Double
     @Binding var calorieGoal: Double
@@ -130,126 +242,63 @@ struct EditingGoalsView: View {
             Text("Set Your Daily Goals")
                 .font(.largeTitle)
                 .bold()
+                .padding()
 
-            VStack(alignment: .leading, spacing: 16) {
-                HStack {
-                    Text("Water Consumption (mL)")
-                        .font(.subheadline)
-                    Spacer()
-                    TextField("0", value: $waterGoal, format: .number)
-                        .multilineTextAlignment(.trailing)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .keyboardType(.numberPad)
-                        .frame(width: 100) // Set width for consistency
-                }
-                .padding(.horizontal)
+            Form {
+                Section(header: Text("Goals")) {
+                    HStack {
+                        Text("Water Goal (mL)")
+                        Spacer()
+                        TextField("Water", value: $waterGoal, format: .number)
+                            .keyboardType(.numberPad)
+                            .multilineTextAlignment(.trailing)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
 
-                HStack {
-                    Text("Food Intake (cal)")
-                        .font(.subheadline)
-                    Spacer()
-                    TextField("0", value: $calorieGoal, format: .number)
-                        .multilineTextAlignment(.trailing)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .keyboardType(.numberPad)
-                        .frame(width: 100)
-                }
-                .padding(.horizontal)
+                    HStack {
+                        Text("Calorie Goal (cal)")
+                        Spacer()
+                        TextField("Calories", value: $calorieGoal, format: .number)
+                            .keyboardType(.numberPad)
+                            .multilineTextAlignment(.trailing)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
 
-                HStack {
-                    Text("Exercise Time (min)")
-                        .font(.subheadline)
-                    Spacer()
-                    TextField("0", value: $exerciseGoal, format: .number)
-                        .multilineTextAlignment(.trailing)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .keyboardType(.numberPad)
-                        .frame(width: 100)
-                }
-                .padding(.horizontal)
+                    HStack {
+                        Text("Exercise Goal (minutes)")
+                        Spacer()
+                        TextField("Exercise", value: $exerciseGoal, format: .number)
+                            .keyboardType(.numberPad)
+                            .multilineTextAlignment(.trailing)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
 
-                HStack {
-                    Text("Reading (pages)")
-                        .font(.subheadline)
-                    Spacer()
-                    TextField("0", value: $pageGoal, format: .number)
-                        .multilineTextAlignment(.trailing)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .keyboardType(.numberPad)
-                        .frame(width: 100)
+                    HStack {
+                        Text("Reading Goal (pages)")
+                        Spacer()
+                        TextField("Pages", value: $pageGoal, format: .number)
+                            .keyboardType(.numberPad)
+                            .multilineTextAlignment(.trailing)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
                 }
-                .padding(.horizontal)
             }
-            .padding(.top)
 
             Button(action: {
-                dismiss() // Save and dismiss
+                dismiss()
             }) {
-                Text("Set Goals")
+                Text("Save Goals")
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(8)
             }
-            .padding(.horizontal)
-        }
-        .padding()
-    }
-}
-
-struct LogDataView: View {
-    @Binding var isPresented: Bool
-    @Binding var tasks: [Task]
-    @State private var taskName = ""
-    @State private var dueDate = Date()
-    @State private var selectedColor = Color.blue
-    @State private var taskEstimateTime = ""
-
-    @State private var name = ""
-    @State private var amount = ""
-    @State private var selectedType = "Water" // Default selection
-
-    let taskTypes = ["Water", "Food", "Exercise", "Read"]
-
-
-
-    var body: some View {
-        NavigationView {
-            Form {
-                TextField("Item to Record", text: $name)
-
-                Picker("Select the Type", selection: $selectedType) {
-                    ForEach(taskTypes, id: \.self) { type in
-                        Text(type).tag(type)
-                    }
-                }
-                .pickerStyle(MenuPickerStyle()) // Optional: Use a menu dropdown style
-
-
-                TextField("Amount", text: $taskEstimateTime)
-
-                ColorPicker("Task Color", selection: $selectedColor)
-            }
-            .navigationTitle("Log Recorder")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        isPresented = false
-                    }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        let newTask = Task(name: taskName, dueDate: dueDate, color: selectedColor, estimateTime: taskEstimateTime)
-                        tasks.append(newTask)
-                        isPresented = false
-                    }
-                    .disabled(name.isEmpty)
-                }
-            }
+            .padding()
         }
     }
 }
+
 
 #Preview {
     FourthPageView()
