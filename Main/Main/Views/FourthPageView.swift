@@ -66,10 +66,11 @@ struct FourthPageView: View {
             .padding()
             Divider()
 
+            Text("Logged Data")
+                .font(.headline)
+                .padding(.leading)
+            
             VStack(alignment: .leading) {
-                Text("Logged Data")
-                    .font(.headline)
-                    .padding(.leading)
 
                 ScrollView {
                     ForEach(tasks) { task in
@@ -81,11 +82,12 @@ struct FourthPageView: View {
                                 Text("\(task.type): \(task.name)")
                                     .font(.body)
                                     .foregroundColor(.primary)
-                                Text("Amount: \(task.amount)")
+                                Text("Amount: \(task.amount) \(unit(for: task.type))")
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                             }
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
                         .padding(.vertical, 4)
                     }
@@ -118,6 +120,21 @@ struct FourthPageView: View {
     private func calculatePercentage(current: Double, goal: Double) -> Double {
         guard goal > 0 else { return 0.0 }
         return min(current / goal, 1.0)
+    }
+    
+    private func unit(for type: String) -> String {
+        switch type {
+        case "Water Drinking":
+            return "mL"
+        case "Food Intake":
+            return "cal"
+        case "Exercise":
+            return "min"
+        case "Reading":
+            return "pages"
+        default:
+            return type
+        }
     }
 }
 
@@ -173,7 +190,7 @@ struct LogDataView: View {
     var body: some View {
         NavigationView {
             Form {
-                TextField("Task Name", text: $name)
+                TextField("Activity Name", text: $name)
                 Picker("Select Type", selection: $selectedType) {
                     ForEach(taskTypes, id: \.self) { type in
                         Text(type).tag(type)

@@ -329,7 +329,6 @@ struct JournalView: View {
 				.bold()
 				.foregroundStyle(.secondary)
 				.foregroundColor(.black)
-				.background(.ultraThinMaterial)
 				.padding(5)
 			Button(action: {
 				isAddingJournal.toggle()

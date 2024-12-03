@@ -269,7 +269,7 @@ struct ThickProgressViewStyle: ProgressViewStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         GeometryReader { geometry in
-            ZStack() {
+            ZStack(alignment: .leading) {
                 RoundedRectangle(cornerRadius: height / 2)
                     .frame(height: height)
                     .foregroundColor(tint.opacity(0.3))
