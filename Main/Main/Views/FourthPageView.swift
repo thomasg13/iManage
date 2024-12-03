@@ -143,8 +143,9 @@ struct CircularProgressBar: View {
     var lineWidth: CGFloat = 20
     var barColor: Color = .blue
     var backgroundColor: Color = .gray.opacity(0.2)
-    var text: String = "Test"
-
+    var text: String = "Water"
+    @State private var isSpinning = false
+    
     var body: some View {
         ZStack {
             Circle()
@@ -155,17 +156,34 @@ struct CircularProgressBar: View {
                 .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                 .foregroundColor(barColor)
                 .shadow(color: barColor.opacity(0.5), radius: 10, x: 0, y: 0)
+                .shadow(color: barColor.opacity(0.3), radius: 15, x: 0, y: 0)
+                .shadow(color: barColor.opacity(0.1), radius: 20, x: 0, y: 0)
                 .rotationEffect(.degrees(-90))
                 .animation(.easeInOut(duration: 1.0), value: progress)
             
+            .rotationEffect(.degrees(isSpinning ? 360 : 0))
+            .animation(isSpinning ? Animation.linear(duration: 2).repeatForever(autoreverses: false) : .none, value: isSpinning)
+            
             VStack {
+                if progress == 1.0 {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.largeTitle)
+                        .foregroundColor(.green)
+                        .onAppear {
+                            isSpinning = true
+                        }
+                } else {
+                    Text("\(Int(progress * 100))%")
+                        .font(.title3)
+                        .bold()
+                        .foregroundColor(barColor)
+                        .shadow(color: barColor.opacity(0.8), radius: 5, x: 0, y: 0)
+                }
                 Text(text)
                     .font(.headline)
-                    .foregroundColor(.primary)
-                Text("\(Int(progress * 100))%")
-                    .font(.largeTitle)
-                    .bold()
                     .foregroundColor(barColor)
+                    .bold()
+                    .shadow(color: barColor.opacity(0.5), radius: 5, x: 0, y: 0)
             }
         }
         .padding(lineWidth / 2)
