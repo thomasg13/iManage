@@ -20,15 +20,12 @@ struct ThirdPageView: View {
     var body: some View {
         ZStack {
             VStack {
-                Spacer()
-                Spacer()
-                Spacer()
-                Spacer()
                 Text("Book Shelf")
-                    .font(Font.custom("Borel-Regular", size: 40))
+                    .font(Font.custom("Borel-Regular", size: 30))
                     .bold()
                     .foregroundStyle(.secondary)
                     .padding(5)
+					.offset(y:80)
                 BooksView(books: $books, toViewShelf: $toViewShelf)
                 JournalView(Journals: $Journals)
                 Spacer()
@@ -46,12 +43,13 @@ struct ThirdPageView: View {
                             .shadow(radius: 5)
                     }
                     .padding()
-                    .offset(y: -40)
+                    .offset(y: -140)
                 }
-            }
+			}
 
             // Floating Button for Pomodoro Timer
         }
+		.offset(y:20)
         .sheet(isPresented: $toViewShelf) {
             BookShelfView(books: $books)
         }
@@ -78,9 +76,10 @@ struct BooksView : View {
                     .clipShape(Circle())
                     .shadow(radius: 5)
             }
-            .offset(y: -40)
+            .offset(y: -30)
         }
         .padding(20)
+		.offset(y:20)
     }
 }
 struct BooksFrontView : View {
@@ -106,9 +105,10 @@ struct BooksFrontView : View {
                         .scaleEffect(x: 1, y: 3)
                     Text("\((Int)(book.progress * 100))%")
                         .font(Font.custom("Borel-Regular", size: 20))
-                }
+				}.offset(y:-40)
                 .padding(10)
             }
+			.offset(y:20)
         }
     }
 }
@@ -326,28 +326,52 @@ struct JournalView: View {
     @State private var isAddingJournal = false
     @Binding var Journals: [journal]
     var body: some View {
-        VStack() {
-            Text("Journal")
-                .font(Font.custom("Borel-Regular", size: 40))
-                .bold()
-                .foregroundStyle(.secondary)
-                .padding(5)
-            Button(action: {
-                isAddingJournal.toggle()
-            }) {
-                Image(systemName: "book")
-                    .foregroundColor(.white)
-                    .frame(width: 200, height: 60)
-                    .background(Color.blue)
-                    .clipShape(.capsule)
-                    .shadow(radius: 5)
-                    .padding()
-            }
-            
-            .sheet(isPresented: $isAddingJournal) {
-                JournalNoteView(Journals: $Journals)
-            }
-        }
+		VStack() {
+			Spacer()
+			Spacer()
+			Text("Recents")
+				.font(Font.custom("Borel-Regular", size: 30))
+				.bold()
+				.foregroundStyle(.secondary)
+				.padding()
+				.offset(y: -70)
+			List {
+				ForEach(Journals.prefix(2), id: \.id) { journal in
+					HStack {
+						Spacer()
+						
+						VStack(alignment: .leading) {
+							VStack {
+								Text(journal.title)
+									.font(.headline)
+								Text(journal.date)
+								Text(journal.note)
+							}
+						}
+						Spacer()
+					}
+				}
+			}
+			.frame(height: 200)
+			.background(Color.clear)
+			.offset(y:-100)
+			
+			Button(action: {
+				isAddingJournal.toggle()
+			}) {
+				Image(systemName: "book")
+					.foregroundColor(.white)
+					.frame(width: 100, height: 50)
+					.background(Color.blue)
+					.clipShape(.capsule)
+					.shadow(radius: 5)
+					.padding()
+			}
+			.offset(y:-20)
+		}
+		.sheet(isPresented: $isAddingJournal) {
+			JournalNoteView(Journals: $Journals)
+		}
         .padding()
     }
 }
@@ -503,7 +527,6 @@ struct JournalNoteView: View {
             }
         }
     }
-    
     
     struct EditJournalView: View {
         @Binding var journal: journal
