@@ -43,13 +43,13 @@ struct ThirdPageView: View {
                             .shadow(radius: 5)
                     }
                     .padding()
-                    .offset(y: -140)
+                    .offset(y: -160)
                 }
 			}
 
             // Floating Button for Pomodoro Timer
         }
-		.offset(y:20)
+		.offset(y:40)
         .sheet(isPresented: $toViewShelf) {
             BookShelfView(books: $books)
         }
@@ -352,6 +352,7 @@ struct JournalView: View {
 					}
 				}
 			}
+			.cornerRadius(15)
 			.frame(height: 200)
 			.background(Color.clear)
 			.offset(y:-100)
@@ -367,7 +368,7 @@ struct JournalView: View {
 					.shadow(radius: 5)
 					.padding()
 			}
-			.offset(y:-20)
+			.offset(y:-40)
 		}
 		.sheet(isPresented: $isAddingJournal) {
 			JournalNoteView(Journals: $Journals)
