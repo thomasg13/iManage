@@ -5,4 +5,6 @@ struct Exercise: Identifiable {
     var name: String
     var sets: Int
     var reps: Int
+    var weight: Double? // Optional property to store weight
+    var isCompleted: Bool = false // Track if the exercise is completed
 }

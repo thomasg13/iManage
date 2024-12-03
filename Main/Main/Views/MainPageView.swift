@@ -202,7 +202,7 @@ struct AddTaskView: View {
                 
                 DatePicker("Due Date", selection: $dueDate, displayedComponents: .date)
                 
-                TextField("Estimate Time", text: $taskEstimateTime)
+                TextField("Estimate Time (In Minutes)", text: $taskEstimateTime)
                 
                 ColorPicker("Task Color", selection: $selectedColor)
             }
