@@ -7,17 +7,17 @@ struct WorkoutDetailView: View {
         VStack(spacing: 20) {
             // Header with date and workout type in the same line
             HStack {
-                Text("Workout for \(formattedDate(workoutDay.date)):")
+                Text("Workout for \(formattedDate(workoutDay.date))")
                     .font(.title2)
                     .bold()
 
                 Spacer()
 
                 Text(workoutDay.type)
-                    .font(.title3)
-                    .bold()
-                    .foregroundColor(.blue)
+                    .font(.headline)
+                    .foregroundColor(.gray)
             }
+            .padding(.horizontal)
             .padding(.top, 20)
 
             // Exercises List
