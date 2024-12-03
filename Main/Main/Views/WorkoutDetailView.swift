@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct WorkoutDetailView: View {
-    var workoutDay: WorkoutDay
+    @Binding var workoutDay: WorkoutDay
 
     var body: some View {
         VStack {
@@ -14,12 +14,13 @@ struct WorkoutDetailView: View {
                 .font(.title2)
                 .foregroundColor(.gray)
 
-            List(workoutDay.exercises) { exercise in
+            List($workoutDay.exercises) { $exercise in
                 VStack(alignment: .leading) {
                     Text(exercise.name)
                         .font(.headline)
+
                     HStack {
-                        TextField("Weight (lbs)", text: .constant(""))
+                        TextField("Weight (lbs)", value: $exercise.weight, formatter: NumberFormatter())
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .keyboardType(.decimalPad)
                             .frame(width: 100)
@@ -27,12 +28,11 @@ struct WorkoutDetailView: View {
                         Spacer()
 
                         Button(action: {
-                            // Mark exercise as complete logic
-                            print("Completed \(exercise.name)")
+                            exercise.isCompleted.toggle()
                         }) {
-                            Text("Complete")
+                            Text(exercise.isCompleted ? "Completed" : "Complete")
                                 .padding(8)
-                                .background(Color.blue)
+                                .background(exercise.isCompleted ? Color.gray : Color.blue)
                                 .foregroundColor(.white)
                                 .cornerRadius(8)
                         }
@@ -44,7 +44,6 @@ struct WorkoutDetailView: View {
         .padding()
     }
 
-    // Helper to format the date
     private func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM dd" // E.g., Dec 02

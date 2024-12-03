@@ -3,7 +3,7 @@ import SwiftUI
 struct SecondPageView: View {
     @State private var workoutSchedule = WorkoutSchedule()
     @State private var selectedWorkoutDay: WorkoutDay? = nil
-    @State private var selectedDate: Date? = nil // Track the selected date
+    @State private var selectedDate: Date = Date() // Track the selected date
 
     var body: some View {
         NavigationView {
@@ -47,10 +47,20 @@ struct SecondPageView: View {
 
                 // Automatically navigate to the Workout Details view when a date is selected
                 NavigationLink(
-                    destination: WorkoutDetailView(workoutDay: selectedWorkoutDay ?? WorkoutDay(date: Date(), type: "Rest", exercises: [])),
+                    destination: WorkoutDetailView(
+                        workoutDay: Binding(
+                            get: { selectedWorkoutDay ?? WorkoutDay(date: Date(), type: "Rest", exercises: []) },
+                            set: { updatedWorkoutDay in
+                                if let index = workoutSchedule.days.firstIndex(where: { $0.id == updatedWorkoutDay.id }) {
+                                    workoutSchedule.days[index] = updatedWorkoutDay
+                                }
+                                selectedWorkoutDay = updatedWorkoutDay
+                            }
+                        )
+                    ),
                     isActive: Binding(
                         get: { selectedWorkoutDay != nil },
-                        set: { _ in selectedWorkoutDay = nil } // Reset the selected workout day when navigating back
+                        set: { if !$0 { selectedWorkoutDay = nil } }
                     )
                 ) {
                     EmptyView()
@@ -58,6 +68,11 @@ struct SecondPageView: View {
             }
             .onAppear {
                 workoutSchedule.generateSchedule() // Generate schedule on load
+                // Set the default selected day to the current date
+                if let today = workoutSchedule.days.first(where: { Calendar.current.isDate($0.date, inSameDayAs: Date()) }) {
+                    selectedWorkoutDay = nil // Ensure it doesn't navigate to the detail page
+                    selectedDate = today.date
+                }
             }
         }
     }
@@ -76,6 +91,7 @@ struct SecondPageView: View {
         return formatter.string(from: date)
     }
 }
+
 
 #Preview {
     SecondPageView()
