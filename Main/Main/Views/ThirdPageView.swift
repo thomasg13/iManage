@@ -144,7 +144,7 @@ struct BookShelfView: View {
 				ModifyBookView(book: $books[index], books: $books)
 			} else {
 				Text("Here you can edit your book and/or update your reading progress (Swipe to the left)")
-					.font(Font.custom("Borel-Regular", size: 40))
+					.font(Font.custom("Monaco", size: 35))
 					.bold()
 					.foregroundStyle(.secondary)
 					.foregroundColor(.black)
@@ -292,6 +292,9 @@ struct BookRowView: View {
 
 	var body: some View {
 		HStack {
+			Capsule(style: RoundedCornerStyle.continuous)
+				.fill(.blue)
+				.frame(width: 5, height: .infinity)
 			Text("\(book.name) Since: \(book.startDate)")
 			ProgressView(value: book.progress, total: 1)
 				.padding()
@@ -552,7 +555,7 @@ struct JournalNoteView: View {
 		Book(name: "Magic Mountain", startDate: "2024-11-28", pages: 300, pagesRead:100)
 	]
 	@State var Journals : [journal] = [
-		journal(title: "First Journal", date: "", note: "This is the first journal entry")
+		journal(title: "First Journal", date: "12/3/24", note: "This is the first journal entry")
 	]
 	return ThirdPageView(books: $books, Journals: $Journals)
 }
