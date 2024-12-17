@@ -9,11 +9,14 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var showLoadingScreen = true
-    @State private var books: [Book] = [
-        Book(name: "The great gatsby", startDate: "2024-11-27", isCompleted: false, pages: 300, pagesPerDay: 10, days: 20),
-        Book(name: "Magic Mountain", startDate: "2024-11-20", isCompleted: false, pages: 500, pagesPerDay: 10, days: 20)
-    ]
-    
+	@State var books: [Book] = [
+		Book(name: "The Great Gatsby", startDate: "2024-11-27", pages: 300, pagesRead:100),
+		Book(name: "Magic Mountain", startDate: "2024-11-28", pages: 300, pagesRead:100)
+	]
+	@State var Journals : [journal] = [
+		journal(title: "First Journal", date: "12/3/24", note: "This is the first journal entry")
+	]
+	@State private var selectedTab = 0
     var body: some View {
         ZStack {
             if showLoadingScreen {
@@ -21,27 +24,56 @@ struct ContentView: View {
                     .transition(.opacity)
                     .animation(.easeIn, value: 1)
             } else {
-                TabView{
+                TabView(selection: $selectedTab){
                     MainPageView()
                         .tabItem() {
-                            Image(systemName: "star.fill")
-                            Text("Page 1")
+							if(selectedTab == 0) {
+								Image(systemName: "checkmark.circle.fill")
+								Text("Tasks")
+							}
+							else {
+								Image(systemName: "checkmark")
+								Text("Tasks")
+							}
                         }
+						.tag(0)
                     SecondPageView()
                         .tabItem() {
-                            Image(systemName: "star.fill")
-                            Text("Page 2")
+							if(selectedTab == 1) {
+								Image(systemName: "dumbbell.fill")
+								Text("Fitness")
+							}
+							else {
+								Image(systemName: "dumbbell")
+								Text("Fitness")
+							}
                         }
-                    ThirdPageView(books: $books)
+						.tag(1)
+					
+					ThirdPageView(books: $books, Journals: $Journals)
                         .tabItem() {
-                            Image(systemName: "star.fill")
-                            Text("Page 3")
+							if(selectedTab == 2) {
+								Image(systemName: "book.circle.fill")
+								Text("Intel")
+							}
+							else {
+								Image(systemName: "book")
+								Text("Intel")
+							}
                         }
+						.tag(2)
                     FourthPageView()
                         .tabItem() {
-                            Image(systemName: "star.fill")
-                            Text("Page 4")
+							if(selectedTab == 3) {
+								Image(systemName: "star.circle.fill")
+								Text("Daily Goals")
+							}
+							else {
+								Image(systemName: "star")
+								Text("Daily Goals")
+							}
                         }
+						.tag(3)
                 }
             }
         }

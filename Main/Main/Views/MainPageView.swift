@@ -202,7 +202,7 @@ struct AddTaskView: View {
                 
                 DatePicker("Due Date", selection: $dueDate, displayedComponents: .date)
                 
-                TextField("Estimate Time", text: $taskEstimateTime)
+                TextField("Estimate Time (In Minutes)", text: $taskEstimateTime)
                 
                 ColorPicker("Task Color", selection: $selectedColor)
             }
@@ -269,7 +269,7 @@ struct ThickProgressViewStyle: ProgressViewStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         GeometryReader { geometry in
-            ZStack() {
+            ZStack(alignment: .leading) {
                 RoundedRectangle(cornerRadius: height / 2)
                     .frame(height: height)
                     .foregroundColor(tint.opacity(0.3))

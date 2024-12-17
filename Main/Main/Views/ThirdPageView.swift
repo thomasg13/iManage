@@ -4,72 +4,30 @@ struct Book: Identifiable, Equatable {
     let id = UUID()
     var name: String
     var startDate: String
-    var isCompleted = false
     var pages: Double
-    var pagesPerDay: Double
-    var days: Double
-    var journal: String = ""
+    var pagesRead : Double
     var progress: Double {
-        return (pagesPerDay * days / pages)
+        return (pagesRead / pages)
     }
 }
 
 struct ThirdPageView: View {
     @Binding var books: [Book]
+    @Binding var Journals: [journal]
     @State private var toViewShelf: Bool = false
-    @State private var isChecked: Bool = false
-    @State private var lastCheckedDate: Date?
     @State private var showPomodoro: Bool = false // State for Pomodoro timer
 
     var body: some View {
         ZStack {
             VStack {
                 Text("Book Shelf")
-                    .font(.system(size: 25))
+                    .font(Font.custom("Borel-Regular", size: 30))
                     .bold()
                     .foregroundStyle(.secondary)
-                    .foregroundColor(.blue)
-                    .background(.ultraThinMaterial)
-                VStack {
-                    HStack {
-                        if let reading = books.first {
-                            Text("Current: \(reading.name)")
-                                .font(.system(size: 20))
-                            Spacer()
-                            ProgressView(value: reading.progress, total: 1)
-                                .padding()
-                                .accentColor(.purple)
-                            Text("\((Int)((reading.progress) * 100))%")
-                        }
-                        Toggle(isOn: $isChecked) { }
-                        Button(action: {
-                            print("View Book Shelf")
-                            toViewShelf.toggle()
-                        }) {
-                            Image(systemName: "arrow.right.circle.fill")
-                                .foregroundColor(.white)
-                                .frame(width: 30, height: 30)
-                                .background(Color.blue)
-                                .clipShape(Circle())
-                                .shadow(radius: 5)
-                        }
-                    }
-                    .padding(20)
-                }
-                .onChange(of: isChecked) { value in
-                    if value {
-                        incrementReadingValues()
-                    }
-                }
-                .disabled(isChecked || !canCheckToday())
-
-                if let reading = books.first {
-                    JournalView(journal: $books[books.firstIndex(where: { $0.id == reading.id })!].journal)
-                }
-            }
-
-            // Floating Button for Pomodoro Timer
-            VStack {
+                    .padding(5)
+					.offset(y:80)
+                BooksView(books: $books, toViewShelf: $toViewShelf)
+                JournalView(Journals: $Journals)
                 Spacer()
                 HStack {
                     Spacer()
@@ -85,65 +43,95 @@ struct ThirdPageView: View {
                             .shadow(radius: 5)
                     }
                     .padding()
+                    .offset(y: -160)
                 }
-            }
+			}
+
+            // Floating Button for Pomodoro Timer
         }
+		.offset(y:40)
         .sheet(isPresented: $toViewShelf) {
             BookShelfView(books: $books)
         }
         .sheet(isPresented: $showPomodoro) {
             PomodoroTimerView() // Present Pomodoro Timer
         }
-        .onAppear {
-            checkIfCheckedToday()
-        }
-    }
-
-    private func incrementReadingValues() {
-        if var reading = books.first {
-            reading.days += 1
-            if let index = books.firstIndex(where: { $0.id == reading.id }) {
-                books[index] = reading
-            }
-            lastCheckedDate = Date()
-        }
-    }
-
-    private func canCheckToday() -> Bool {
-        guard let lastChecked = lastCheckedDate else { return true }
-        let calendar = Calendar.current
-        return !calendar.isDateInToday(lastChecked)
-    }
-
-    private func checkIfCheckedToday() {
-        if let lastChecked = lastCheckedDate {
-            let calendar = Calendar.current
-            if calendar.isDateInToday(lastChecked) {
-                isChecked = true
-            }
-        }
     }
 }
 
+struct BooksView : View {
+    @Binding var books: [Book]
+    @Binding var toViewShelf: Bool
+    var body : some View {
+        HStack {
+            BooksFrontView(books: $books)
+            Button(action: {
+                print("View Book Shelf")
+                toViewShelf=true
+            }) {
+                Image(systemName: "arrow.right.circle.fill")
+                    .foregroundColor(.white)
+                    .frame(width: 30, height: 30)
+                    .background(Color.blue)
+                    .clipShape(Circle())
+                    .shadow(radius: 5)
+            }
+            .offset(y: -30)
+        }
+        .padding(20)
+		.offset(y:20)
+    }
+}
+struct BooksFrontView : View {
+	
+    @Binding var books: [Book]
+    var body : some View {
+        ForEach(books.prefix(2), id: \.id) { book in
+            VStack {
+                ZStack {
+                    Image(.cover)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 150, height: 200)
+                        .border(Color.gray, width: 2)
+                    Text(book.name)
+						.font(Font.custom("Borel-Regular", size: 25))
+						.foregroundStyle(Color.black)
+                }
+                HStack {
+                    ProgressView(value: book.progress, total: 1)
+                        .padding()
+                        .accentColor(.purple)
+                        .scaleEffect(x: 1, y: 3)
+                    Text("\((Int)(book.progress * 100))%")
+                        .font(Font.custom("Borel-Regular", size: 20))
+				}.offset(y:-40)
+                .padding(10)
+            }
+			.offset(y:20)
+        }
+    }
+}
 struct BookShelfView: View {
     @State private var addBook : Bool = false
     @Binding var books: [Book]
     @State private var selectedBook: Book?
-    @State private var changeBook: Bool = false
+    @State private var changeBook: Bool = true
 
     var body: some View {
         VStack {
             Text("Your Book Shelf")
-                .font(.system(size: 25))
+                .font(Font.custom("Borel-Regular", size: 25))
                 .bold()
                 .padding()
+            Text("Edit or Update Reading Progress")
             Spacer()
             List(books) { book in
-                BookRowView(book: book, changeBook: $changeBook, selectedBook: $selectedBook)
+                BookRowView(book: book, changeBook: $changeBook, selectedBook: $selectedBook, books: $books)
             }
             Spacer()
             Button(action: {
-                addBook.toggle()
+                addBook=true
             }) {
                 Image(systemName: "plus")
                     .foregroundColor(.white)
@@ -153,15 +141,28 @@ struct BookShelfView: View {
                     .shadow(radius: 5)
             }
         }
-        .sheet(isPresented: $changeBook) {
+        .sheet(isPresented: Binding(
+            get: { changeBook && selectedBook != nil },
+            set: { changeBook = $0 }
+        )) {
             if let selected = selectedBook, let index = books.firstIndex(where: { $0.id == selected.id }) {
-                //print("Presenting ModifyBookView for \(selectedBook.name)")
                 ModifyBookView(book: $books[index], books: $books)
-            } else {
-                //print("No book selected")
-                Text("No book selected")
             }
         }
+//        .sheet(isPresented: $changeBook) {
+//
+//            if let selected = selectedBook, let index = books.firstIndex(where: { $0.id == selected.id }) {
+//                ModifyBookView(book: $books[index], books: $books)
+//            }
+//            else {
+////                Text("Here you can edit your book and/or update your reading progress (Swipe to the left)")
+////                    .font(Font.custom("Monaco", size: 35))
+////                    .bold()
+////                    .foregroundStyle(.secondary)
+//////                    .foregroundColor(.black)
+////                    .padding(5)
+//            }
+//        }
         .sheet(isPresented: $addBook) {
             NewBookView(books: $books)
         }
@@ -186,17 +187,17 @@ struct NewBookView: View {
         return formatter
     }
     @State private var pages: Double = 0
-    @State private var pagesPerDay: Double = 0
+    @State private var pagesRead: Double = 0
     @State private var days: Double = 0
 
     var body: some View {
         VStack {
             Text("Add New Book")
                 .font(.largeTitle)
-                .padding()
+                .padding(.top, 75)
             TextField("Book Name", text: $name)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
+//                .padding()
             Text("Start Date")
 //            TextField("Start Date", text: $startDate)
 //                .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -211,12 +212,12 @@ struct NewBookView: View {
             TextField("Pages", value: $pages, formatter: NumberFormatter())
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
-            Text("Pages Per Day")
-            TextField("Pages per Day", value: $pagesPerDay, formatter: NumberFormatter())
+            Text("Pages Read")
+            TextField("Pages Read", value: $pagesRead, formatter: NumberFormatter())
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
             Button(action: {
-                let newBook = Book(name: name, startDate: startDate, pages: pages, pagesPerDay: pagesPerDay, days: days)
+                let newBook = Book(name: name, startDate: startDate, pages: pages, pagesRead: pagesRead)
                 books.append(newBook)
                 presentationMode.wrappedValue.dismiss()
             }) {
@@ -262,8 +263,10 @@ struct ModifyBookView: View {
             TextField("Pages", value: $book.pages, formatter: NumberFormatter())
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
-            Text("Pages Per Day")
-            TextField("Pages per Day", value: $book.pagesPerDay, formatter: NumberFormatter())
+            
+            Spacer()
+            Text("PagesRead")
+            TextField("Pages Read", value: $book.pagesRead, formatter: NumberFormatter())
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
             Button(action: {
@@ -275,7 +278,6 @@ struct ModifyBookView: View {
                     .background(Color.blue)
                     .cornerRadius(10)
             }
-            Spacer()
         }
         .padding()
         .onAppear {
@@ -298,53 +300,296 @@ struct BookRowView: View {
     var book: Book
     @Binding var changeBook: Bool
     @Binding var selectedBook: Book?
-
+    @Binding var books : [Book]
     var body: some View {
         HStack {
+			Capsule(style: RoundedCornerStyle.continuous)
+				.fill(.blue)
+				.frame(width: 5, height: .infinity)
             Text("\(book.name) Since: \(book.startDate)")
             ProgressView(value: book.progress, total: 1)
                 .padding()
                 .accentColor(.purple)
             Text("\((Int)((book.progress) * 100))%")
+        }.swipeActions {
             Button(action: {
                 selectedBook = book
                 print("Selected Book: \(selectedBook?.name ?? "None")")
-                
                 changeBook.toggle()
             }) {
-                Image(systemName: "arrow.right.circle.fill")
-                    .foregroundColor(.white)
-                    .frame(width: 30, height: 30)
-                    .background(Color.blue)
-                    .clipShape(Circle())
-                    .shadow(radius: 5)
+                Label("Edit", systemImage: "pencil")
+            }
+            .tint(.blue)
+            Button(role: .destructive) {
+                deleteBook(book)
+            } label: {
+                Label("Delete", systemImage: "trash")
             }
         }
+    }
+    private func deleteBook(_ book: Book) {
+        books.removeAll { $0.id == book.id }
     }
 }
 
 struct JournalView: View {
-    @Binding var journal: String
 
+    @State private var isAddingJournal = false
+    @Binding var Journals: [journal]
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Journal")
-                .font(.headline)
-                .padding(.bottom, 5)
-            TextEditor(text: $journal)
-                .frame(height: 200)
-                .border(Color.gray, width: 1)
-                .padding(.bottom, 10)
-        }
+		VStack() {
+			Spacer()
+			Spacer()
+			Text("Recents")
+				.font(Font.custom("Borel-Regular", size: 30))
+				.bold()
+				.foregroundStyle(.secondary)
+				.padding()
+				.offset(y: -70)
+			List {
+				ForEach(Journals.prefix(2), id: \.id) { journal in
+					HStack {
+						Spacer()
+						
+						VStack(alignment: .leading) {
+							VStack {
+								Text(journal.title)
+									.font(.headline)
+								Text(journal.date)
+								Text(journal.note)
+							}
+						}
+						Spacer()
+					}
+				}
+			}
+			.cornerRadius(15)
+			.frame(height: 200)
+			.background(Color.clear)
+			.offset(y:-100)
+			
+			Button(action: {
+				isAddingJournal.toggle()
+			}) {
+				Image(systemName: "book")
+					.foregroundColor(.white)
+					.frame(width: 100, height: 50)
+					.background(Color.blue)
+					.clipShape(.capsule)
+					.shadow(radius: 5)
+					.padding()
+			}
+			.offset(y:-40)
+		}
+		.sheet(isPresented: $isAddingJournal) {
+			JournalNoteView(Journals: $Journals)
+		}
         .padding()
     }
 }
 
-#Preview {
-    @State var books: [Book] = [
-        Book(name: "The Great Gatsby", startDate: "2024-11-27", isCompleted: false, pages: 300, pagesPerDay: 10, days: 20),
-        Book(name: "Magic Mountain", startDate: "2024-11-20", isCompleted: false, pages: 500, pagesPerDay: 10, days: 20)
-    ]
-    return ThirdPageView(books: $books)
+struct journal: Identifiable {
+    let id = UUID()
+    var title: String
+    var date: String //FIXME: just added this date param
+    var note: String
 }
 
+struct JournalNoteView: View {
+    @Binding var Journals: [journal]
+    @State private var isAddingJournal = false
+    @State private var JournalBeingEdited: journal? = nil
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Journal")
+                    .font(.largeTitle)
+                    .bold()
+                    .padding(.top, 20)
+            }
+            
+            List {
+                ForEach(Journals) { journal in
+                    HStack {
+                        Capsule(style: RoundedCornerStyle.continuous)
+                            .fill(.blue)
+                            .frame(width: 5, height: .infinity)
+                            
+                        VStack(alignment: .leading) {
+                            VStack {
+                                Text(journal.title)
+                                    .font(.headline)
+                                Text(journal.date)
+                                Text(journal.note)
+                            }
+                        }
+                        Spacer()
+                    }
+                        
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .cornerRadius(8)
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            deleteJournal(journal)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    
+                        Button {
+                            editJournal(journal)
+                        } label: {
+                            Label("Edit", systemImage: "pencil")
+                        }
+                        .tint(.blue)
+                    }
+                }
+            }
+                .listStyle(.sidebar)
+                .sheet(item: $JournalBeingEdited) { journal in
+                    EditJournalView(journal: $Journals[Journals.firstIndex(where: { $0.id == journal.id })!])
+                }
+        }
+        
+        .background(Color(UIColor.systemGroupedBackground))
+        .overlay(
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        isAddingJournal=true
+                    }) {
+                        Image(systemName: "plus")
+                            .foregroundColor(.white)
+                            .frame(width: 60, height: 60)
+                            .background(Color.blue)
+                            .clipShape(Circle())
+                            .shadow(radius: 5)
+                            .padding()
+                    }
+                }
+            }
+        )
+        .sheet(isPresented: $isAddingJournal) {
+            AddJournalView(isPresented: $isAddingJournal, Journals: $Journals)
+        }
+        
+        }
+    
+    
+    private func deleteJournal(_ journal: journal) {
+        Journals.removeAll { $0.id == journal.id }
+    }
+
+    private func editJournal(_ journal: journal) {
+        print("Edit Journal: \(journal.title)")
+        JournalBeingEdited = journal
+    }
+
+    struct AddJournalView: View {
+        @Binding var isPresented: Bool
+        @Binding var Journals: [journal]
+        @State private var journalTitle = ""
+        @State private var journalNote = ""
+        @State private var selectedDate: Date = Date()
+        @State private var journalDate: String = {
+                let formatter = DateFormatter()
+                formatter.dateStyle = .short
+                return formatter.string(from: Date())
+            }()
+        private var dateFormatter: DateFormatter {
+                let formatter = DateFormatter()
+                formatter.dateStyle = .short
+                return formatter
+            }
+        var body: some View {
+            NavigationView {
+                Form {
+                    TextField("Journal Title", text: $journalTitle)
+                    DatePicker("Start Date", selection: $selectedDate, displayedComponents: .date)
+                                    .datePickerStyle(GraphicalDatePickerStyle())
+                                    .padding()
+                                    .onChange(of: selectedDate) { newDate in
+                                        journalDate = dateFormatter.string(from: newDate)
+                                    }
+                    
+                    TextEditor(text: $journalNote)
+                                    .frame(height: 200)
+                                    .border(Color.gray, width: 1)
+                                    .padding(.bottom, 10)
+                }
+                .navigationTitle("Add New Journal Entry")
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") {
+                            isPresented = false
+                        }
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Save") {
+                            let newJournal = journal(title: journalTitle, date: journalDate, note: journalNote)
+                            Journals.append(newJournal)
+                            isPresented = false
+                        }
+                        .disabled(journalTitle.isEmpty)
+                    }
+                }
+            }
+        }
+    }
+    
+    struct EditJournalView: View {
+        @Binding var journal: journal
+        @Environment(\.dismiss) private var dismiss
+        @State private var selectedDate: Date = Date()
+        @State private var journalDate: String = {
+                let formatter = DateFormatter()
+                formatter.dateStyle = .short
+                return formatter.string(from: Date())
+            }()
+        private var dateFormatter: DateFormatter {
+                let formatter = DateFormatter()
+                formatter.dateStyle = .short
+                return formatter
+            }
+        var body: some View {
+            NavigationView {
+                Form {
+                    TextField("Journal Title", text: $journal.title)
+                    DatePicker("Start Date", selection: $selectedDate, displayedComponents: .date)
+                                    .datePickerStyle(GraphicalDatePickerStyle())
+                                    .padding()
+                                    .onChange(of: selectedDate) { newDate in
+                                        journal.date = dateFormatter.string(from: newDate)
+                                    }
+                    TextEditor(text: $journal.note)
+                                    .frame(height: 200)
+                                    .border(Color.gray, width: 1)
+                                    .padding(.bottom, 10)
+                }
+                .navigationTitle("Edit Task")
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") {
+                            dismiss()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+#Preview {
+    @State var books: [Book] = [
+        Book(name: "The Great Gatsby", startDate: "2024-11-27", pages: 300, pagesRead:100),
+        Book(name: "Magic Mountain", startDate: "2024-11-28", pages: 300, pagesRead:100)
+    ]
+    @State var Journals : [journal] = [
+        journal(title: "First Journal", date: "12/3/24", note: "This is the first journal entry")
+    ]
+    return ThirdPageView(books: $books, Journals: $Journals)
+}
